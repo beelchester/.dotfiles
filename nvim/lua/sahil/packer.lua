@@ -180,4 +180,5 @@ use {"akinsho/toggleterm.nvim"}
 
 use{"jose-elias-alvarez/null-ls.nvim"}
 
+use{"lewis6991/gitsigns.nvim"}
   end)
