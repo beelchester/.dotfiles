@@ -10,6 +10,8 @@ export PATH=$VCPKG_ROOT:$PATH
 export ANDROID_NDK_HOME=/Users/sahil/Library/Android/sdk/ndk/26.1.10909125
 export PATH=$HOME/gccrs-install/bin:$PATH
 
+# zsh autocomplete
+
 
 # Path to your oh-my-zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
