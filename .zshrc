@@ -10,7 +10,10 @@ export PATH=$VCPKG_ROOT:$PATH
 export ANDROID_NDK_HOME=/Users/sahil/Library/Android/sdk/ndk/26.1.10909125
 export PATH=$HOME/gccrs-install/bin:$PATH
 
+bindkey '^R' history-incremental-search-backward
+
 # zsh autocomplete
+# source /Users/sahil/zsh-autocomplete/zsh-autocomplete.plugin.zsh
 
 
 # Path to your oh-my-zsh installation.
@@ -33,7 +36,13 @@ export EDITOR="nvim"
 
 ZSH_THEME="robbyrussell"
 
-plugins=(git)
+plugins=(git zsh-autosuggestions)
+ZSH_AUTOSUGGEST_STRATEGY=(history completion)
+ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#FAB387"
+FZF_DEFAULT_OPTS=" \
+--color=bg+:#313244,bg:#1e1e2e,spinner:#f5e0dc,hl:#f38ba8 \
+--color=fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc \
+--color=marker:#f5e0dc,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8"
 
 source $ZSH/oh-my-zsh.sh
 
@@ -65,3 +74,4 @@ export BUN_INSTALL="$HOME/.bun"
 export PATH="$BUN_INSTALL/bin:$PATH"
 bindkey -v # vi mode
 bindkey -M viins jk vi-cmd-mode # jk to exit insert mode
+source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
