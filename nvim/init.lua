@@ -2,7 +2,8 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 vim.g.loaded_netrwPlugin = 1
 vim.g.loaded_netrw = 1
-vim.cmd 'autocmd VimEnter * :Neotree toggle'
+-- vim.cmd 'autocmd VimEnter * :Neotree toggle'
+vim.cmd 'autocmd VimEnter * :Alpha'
 
 vim.opt.number = true
 vim.wo.relativenumber = true
