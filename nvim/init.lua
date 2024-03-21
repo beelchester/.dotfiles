@@ -5,6 +5,7 @@ vim.g.loaded_netrw = 1
 -- vim.cmd 'autocmd VimEnter * :Neotree toggle'
 vim.cmd 'autocmd VimEnter * :Alpha'
 
+vim.opt.conceallevel = 1
 vim.opt.number = true
 vim.wo.relativenumber = true
 vim.opt.mouse = 'a'
