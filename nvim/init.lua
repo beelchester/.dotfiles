@@ -4,6 +4,7 @@ vim.g.loaded_netrwPlugin = 1
 vim.g.loaded_netrw = 1
 -- vim.cmd 'autocmd VimEnter * :Neotree toggle'
 vim.cmd 'autocmd VimEnter * :Alpha'
+vim.keymap.set({ 'n', 'v', 'i', 'x' }, '<M-w>', '<C-w>')
 
 vim.opt.conceallevel = 1
 vim.opt.number = true
@@ -142,6 +143,9 @@ require('lazy').setup {
   -- for dart syntax hightling
   {
     'dart-lang/dart-vim-plugin',
+  },
+  {
+    'mg979/vim-visual-multi',
   },
 
   { import = 'plugins' },
