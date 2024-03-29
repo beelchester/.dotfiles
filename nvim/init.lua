@@ -4,7 +4,7 @@ vim.g.loaded_netrwPlugin = 1
 vim.g.loaded_netrw = 1
 -- vim.cmd 'autocmd VimEnter * :Neotree toggle'
 vim.cmd 'autocmd VimEnter * :Alpha'
-vim.keymap.set({ 'n', 'v', 'i', 'x' }, '<M-w>', '<C-w>')
+vim.keymap.set({ 'n', 'v', 'i', 'x' }, '<M-w>', '<C-,>')
 
 vim.opt.conceallevel = 1
 vim.opt.number = true
