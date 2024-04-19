@@ -33,6 +33,10 @@ shift + alt - t : yabai -m window --toggle float --grid 4:4:1:1:2:2
 # maximize a window
 shift + alt - m : yabai -m window --toggle zoom-fullscreen
 
+# full screen without padding
+shift + alt - f : yabai -m space --padding abs:0:0:0:0; yabai -m window --toggle zoom-fullscreen
+shift + ctrl - f : yabai -m space --padding abs:50:10:10:10; yabai -m window --toggle zoom-fullscreen
+
 # balance out tree of windows (resize to occupy same area)
 shift + alt - e : yabai -m space --balance
 

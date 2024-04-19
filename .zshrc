@@ -34,6 +34,7 @@ alias cdf='source /Users/sahil/cdf.sh'
 
 eval "$(tmuxifier init -)"
 
+
 export EDITOR="nvim"
 
 ZSH_THEME="robbyrussell"
@@ -78,3 +79,46 @@ bindkey -v # vi mode
 bindkey -M viins jk vi-cmd-mode # jk to exit insert mode
 source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
+
+
+# # Load Angular CLI autocompletion.
+# source <(ng completion script)
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+export FZF_DEFAULT_COMMAND="fd --hidden --strip-cwd-prefix --exclude .git"
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+export FZF_ALT_C_COMMAND="fd --type=d --hidden --strip-cwd-prefix --exclude .git"
+
+_fzf_compgen_path() {
+  fd --hidden --exclude .git . "$1"
+}
+
+_fzf_compgen_dir() {
+  fd --type=d --hidden --exclude .git . "$1"
+}
+
+source ~/fzf-git.sh/fzf-git.sh
+export BAT_THEME="Catppuccin Mocha"
+
+alias ls='eza --color=always --icons=always'
+
+export FZF_CTRL_T_OPTS="--preview 'bat -n --color=always --line-range :500 {}'"
+export FZF_ALT_C_OPTS="--preview 'eza --tree --color=always {} | head -200'"
+
+# Advanced customization of fzf options via _fzf_comprun function
+# - The first argument to the function is the name of the command.
+# - You should make sure to pass the rest of the arguments to fzf.
+_fzf_comprun() {
+  local command=$1
+  shift
+
+  case "$command" in
+    cd)           fzf --preview 'eza --tree --icons=always --color=always {} | head -200' "$@" ;;
+    export|unset) fzf --preview "eval 'echo $'{}"         "$@" ;;
+    ssh)          fzf --preview 'dig {}'                   "$@" ;;
+    *)            fzf --preview "bat -n --color=always --line-range :500 {}" "$@" ;;
+  esac
+}
+
+eval $(thefuck --alias)
+eval $(thefuck --alias fk)

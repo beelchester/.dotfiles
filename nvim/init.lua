@@ -30,6 +30,8 @@ vim.opt.hlsearch = true
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 vim.keymap.set('i', 'jk', '<Esc>', { noremap = true, silent = true })
 vim.keymap.set('n', '<leader>e', '<Cmd>Neotree toggle<CR>')
+vim.keymap.set('n', '<leader>cn', '<Cmd>cnext<CR>')
+vim.keymap.set('n', '<leader>cp', '<Cmd>cprev<CR>')
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous [D]iagnostic message' })
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next [D]iagnostic message' })
 vim.keymap.set('n', '<leader>f', vim.diagnostic.open_float, { desc = 'Show diagnostic [E]rror messages' })
@@ -98,6 +100,7 @@ require('lazy').setup {
     opts = {},
   },
   { 'mfussenegger/nvim-dap' },
+  { 'tpope/vim-obsession' },
   {
     'akinsho/flutter-tools.nvim',
     dependencies = { 'nvim-lua/plenary.nvim', 'stevearc/dressing.nvim' },
