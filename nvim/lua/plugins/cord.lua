@@ -24,13 +24,13 @@ return {
       workspace_blacklist = {}, -- List of workspace names to hide
     },
     lsp = {
-      show_problem_count = false, -- Display number of diagnostics problems
+      show_problem_count = true, -- Display number of diagnostics problems
       severity = 1, -- 1 = Error, 2 = Warning, 3 = Info, 4 = Hint
       scope = 'buffer', -- buffer or workspace
     },
     idle = {
       show_idle = true, -- Enable idle status
-      timeout = 1200000, -- Timeout in milliseconds after which the idle status is set, 0 to display immediately
+      timeout = 1000, -- Timeout in milliseconds after which the idle status is set, 0 to display immediately
       disable_on_focus = false, -- Do not display idle status when neovim is focused
       text = 'Idle', -- Text to display when idle
       tooltip = '💤', -- Text to display when hovering over the idle image
