@@ -3,13 +3,6 @@ vim.g.maplocalleader = ' '
 vim.g.loaded_netrwPlugin = 1
 vim.g.loaded_netrw = 1
 -- vim.cmd 'autocmd VimEnter * :Neotree toggle'
-vim.api.nvim_create_autocmd('TextChanged', {
-  desc = 'Run :CordUpdate when the text in the buffer changes; it will restart presence if it was idle',
-  pattern = '*',
-  callback = function()
-    vim.cmd 'CordUpdate'
-  end,
-})
 vim.cmd 'autocmd VimEnter * :Alpha'
 vim.keymap.set({ 'n', 'v', 'i', 'x' }, '<M-w>', '<C-w>')
 

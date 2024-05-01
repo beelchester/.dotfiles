@@ -1,6 +1,5 @@
 return {
-  'sahilyeole/cord.nvim',
-  branch = 'm1-fix',
+  'vyfor/cord.nvim',
   build = './build',
   -- event = 'VeryLazy',
   opts = {
@@ -29,7 +28,8 @@ return {
       scope = 'buffer', -- buffer or workspace
     },
     idle = {
-      show_idle = true, -- Enable idle status
+      enable = true, -- Enable idle status
+      show_status = false, -- Display idle status, disable to hide the rich presence on idle
       timeout = 1000, -- Timeout in milliseconds after which the idle status is set, 0 to display immediately
       disable_on_focus = false, -- Do not display idle status when neovim is focused
       text = 'Idle', -- Text to display when idle
