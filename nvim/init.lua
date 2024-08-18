@@ -4,7 +4,7 @@ vim.g.loaded_netrwPlugin = 1
 vim.g.loaded_netrw = 1
 -- vim.cmd 'autocmd VimEnter * :Neotree toggle'
 vim.cmd 'autocmd VimEnter * :Alpha'
-vim.keymap.set({ 'n', 'v', 'i', 'x' }, '<M-w>', '<C-w>')
+-- vim.keymap.set({ 'n', 'v', 'i', 'x' }, '<M-w>', '<C-,>') -- don't remember why I did this lol
 
 vim.opt.conceallevel = 1
 vim.opt.number = true
@@ -26,24 +26,41 @@ vim.opt.inccommand = 'split'
 vim.opt.cursorline = true
 vim.opt.scrolloff = 10
 vim.opt.hlsearch = true
+-- tabstop, shiftwidth
+-- :set ts=4 sw=4
+-- changing only sw might be enough for manual change in tab width space
 
+-- substitue word under cursor in whole file
+vim.keymap.set('n', '<leader>sb', [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = 'Substitute word' })
+vim.keymap.set('n', '<leader>sp', '<Cmd>vsplit<CR>', { desc = 'Vertical split' })
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 vim.keymap.set('i', 'jk', '<Esc>', { noremap = true, silent = true })
 vim.keymap.set('n', '<leader>e', '<Cmd>Neotree toggle<CR>')
+vim.keymap.set('n', '<leader>ct', '<Cmd>TSContextToggle<CR>')
 vim.keymap.set('n', '<leader>cn', '<Cmd>cnext<CR>')
 vim.keymap.set('n', '<leader>cp', '<Cmd>cprev<CR>')
 vim.keymap.set('n', '[d', vim.diagnostic.goto_prev, { desc = 'Go to previous [D]iagnostic message' })
 vim.keymap.set('n', ']d', vim.diagnostic.goto_next, { desc = 'Go to next [D]iagnostic message' })
 vim.keymap.set('n', '<leader>f', vim.diagnostic.open_float, { desc = 'Show diagnostic [E]rror messages' })
-vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
-vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
-vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
-vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
-vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
+vim.keymap.set('n', '<leader>qf', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
 vim.keymap.set({ 'n', 'v' }, '<leader>y', [["+y]])
 vim.keymap.set('n', '<leader>y', [["+Y]])
 vim.keymap.set('n', '<C-d>', '<C-d>zz')
 vim.keymap.set('n', '<C-u>', '<C-u>zz')
+
+vim.keymap.set('n', '<leader>qs', function()
+  require('persistence').load()
+end, { desc = 'Load session' })
+vim.keymap.set('n', '<leader>qS', function()
+  require('persistence').select()
+end, { desc = 'Select session' })
+vim.keymap.set('n', '<leader>ql', function()
+  require('persistence').load { last = true }
+end, { desc = 'Load last session' })
+-- stop Persistence => session won't be saved on exit
+vim.keymap.set('n', '<leader>qd', function()
+  require('persistence').stop()
+end, { desc = 'Stop Persistence' })
 
 vim.api.nvim_create_autocmd('TextYankPost', {
   desc = 'Highlight when yanking (copying) text',
@@ -99,49 +116,10 @@ require('lazy').setup {
     },
     opts = {},
   },
-  { 'mfussenegger/nvim-dap' },
-  { 'tpope/vim-obsession' },
   {
-    'akinsho/flutter-tools.nvim',
-    dependencies = { 'nvim-lua/plenary.nvim', 'stevearc/dressing.nvim' },
-    config = function()
-      require('flutter-tools').setup {
-        -- (uncomment below line for windows only)
-        -- flutter_path = "home/flutter/bin/flutter.bat",
-
-        debugger = {
-          -- make these two params true to enable debug mode
-          enabled = false,
-          run_via_dap = false,
-          register_configurations = function(_)
-            require('dap').adapters.dart = {
-              type = 'executable',
-              command = vim.fn.stdpath 'data' .. '/mason/bin/dart-debug-adapter',
-              args = { 'flutter' },
-            }
-
-            require('dap').configurations.dart = {
-              {
-                type = 'dart',
-                request = 'launch',
-                name = 'Launch flutter',
-                dartSdkPath = 'home/flutter/bin/cache/dart-sdk/',
-                flutterSdkPath = 'home/flutter',
-                program = '${workspaceFolder}/lib/main.dart',
-                cwd = '${workspaceFolder}',
-              },
-            }
-            -- uncomment below line if you've launch.json file already in your vscode setup
-            -- require("dap.ext.vscode").load_launchjs()
-          end,
-        },
-        dev_log = {
-          -- toggle it when you run without DAP
-          enabled = false,
-          open_cmd = 'tabedit',
-        },
-      }
-    end,
+    'folke/persistence.nvim',
+    event = 'BufReadPre', -- this will only start session saving when an actual file was opened
+    opts = {},
   },
   -- for dart syntax hightling
   {
@@ -150,7 +128,13 @@ require('lazy').setup {
   {
     'mg979/vim-visual-multi',
   },
-
+  {
+    'ThePrimeagen/vim-be-good',
+  },
+  {
+    'nvim-treesitter/nvim-treesitter-context',
+  },
+  -- lazy.nvim
   { import = 'plugins' },
 }
 

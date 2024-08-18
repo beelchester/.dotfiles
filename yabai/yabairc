@@ -1,48 +1,39 @@
-yabai -m signal --add event=dock_did_restart action="sudo yabai --load-sa"
 sudo yabai --load-sa
+yabai -m signal --add event=dock_did_restart action="sudo yabai --load-sa"
 
+yabai -m config \
+    window_gap 10 \
+    top_padding 50 \
+    bottom_padding 10 \
+    left_padding 10 \
+    right_padding 10 \
+    window_animation_duration 0.05 \
+    window_animation_frame_rate 120 \
+    layout bsp \
+    window_placement second_child \
+    mouse_follows_focus on \
+    mouse_modifier alt \
+    mouse_action1 move \
+    mouse_action2 resize \
+    mouse_drop_action swap
+
+#focus_follows_mouse autoraise \
 # focus window after active space changes
 yabai -m signal --add event=space_changed action="yabai -m window --focus \$(yabai -m query --windows --space | jq .[0].id)"
 
 # focus window after active display changes
 yabai -m signal --add event=display_changed action="yabai -m window --focus \$(yabai -m query --windows --space | jq .[0].id)"
 
-#https://github.com/koekeishiya/yabai/issues/692
-yabai -m signal --add event=window_destroyed action="yabai -m query --windows --window &> /dev/null || yabai -m window --focus mouse"
-yabai -m signal --add event=application_terminated action="yabai -m query --windows --window &> /dev/null || yabai -m window --focus mouse"
-
-yabai -m config window_animation_duration 0.05
-yabai -m config window_animation_frame_rate 120
-
-yabai -m config layout bsp
-
-yabai -m config window_placement second_child
-
-launchctl unload -F /System/Library/LaunchAgents/com.apple.WindowManager.plist > /dev/null 2>&1 &
-
-
-yabai -m config top_padding 50
-yabai -m config bottom_padding 10
-yabai -m config left_padding 10
-yabai -m config right_padding 10
-yabai -m config window_gap 10
-
-# -- mouse settings --
-
-# center mouse on window with focus
-yabai -m config mouse_follows_focus on
-yabai -m config focus_follows_mouse autofocus
-
-# modifier for clicking and dragging with mouse
-yabai -m config mouse_modifier alt
-# set modifier + left-click drag to move window
-yabai -m config mouse_action1 move
-# set modifier + right-click drag to resize window
-yabai -m config mouse_action2 resize
-
-# when window is dropped in center of another window, swap them (on edges it will split it)
-yabai -m mouse_drop_action swap
-
+#focus window after window is destroyed/minimized/hidden
+destroy_action="yabai -m query --windows --window &> /dev/null || yabai -m window --focus \$(yabai -m query --windows --space | jq .[0].id) &> /dev/null || yabai -m window --focus mouse &> /dev/null"
+yabai -m signal --add event=window_destroyed active=yes action="$destroy_action"
+yabai -m signal --add event=window_minimized active=yes action="$destroy_action"
+yabai -m signal --add event=application_hidden active=yes action="$destroy_action"
 
 # disable specific apps
-yabai -m rule --add app="^System Settings$" manage=off
+# yabai -m rule --add app="^System Settings$" manage=off
+
+# # bug fix for minimize not working
+# # restart default window manager
+# launchctl unload -F /System/Library/LaunchAgents/com.apple.WindowManager.plist > /dev/null 2>&1 &
+# launchctl load -F /System/Library/LaunchAgents/com.apple.WindowManager.plist > /dev/null 2>&1 &

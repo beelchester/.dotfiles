@@ -16,8 +16,8 @@ return {
       tooltip = 'Chad Editor', -- Text to display when hovering over the editor's image
     },
     display = {
-      show_time = true, -- Display start timestamp
-      show_repository = true, -- Display 'View repository' button linked to repository url, if any
+      show_time = false, -- Display start timestamp
+      show_repository = false, -- Display 'View repository' button linked to repository url, if any
       show_cursor_position = true, -- Display line and column number of cursor's position
       swap_fields = true, -- If enabled, workspace is displayed first
       workspace_blacklist = {}, -- List of workspace names to hide
@@ -30,18 +30,18 @@ return {
     idle = {
       enable = true, -- Enable idle status
       show_status = false, -- Display idle status, disable to hide the rich presence on idle
-      timeout = 1000, -- Timeout in milliseconds after which the idle status is set, 0 to display immediately
+      timeout = 2000, -- Timeout in milliseconds after which the idle status is set, 0 to display immediately
       disable_on_focus = false, -- Do not display idle status when neovim is focused
       text = 'Idle', -- Text to display when idle
       tooltip = '💤', -- Text to display when hovering over the idle image
     },
     text = {
-      viewing = 'Viewing {}', -- Text to display when viewing a readonly file
-      editing = 'Editing {}', -- Text to display when editing a file
-      file_browser = 'Browsing files in {}', -- Text to display when browsing files (Empty string to disable)
-      plugin_manager = 'Managing plugins in {}', -- Text to display when managing plugins (Empty string to disable)
-      lsp_manager = 'Configuring LSP in {}', -- Text to display when managing LSP servers (Empty string to disable)
-      workspace = 'In {}', -- Text to display when in a workspace (Empty string to disable)
+      viewing = '🌊', -- Text to display when viewing a readonly file
+      editing = '🌊', -- Text to display when editing a file
+      file_browser = '🌊', -- Text to display when browsing files (Empty string to disable)
+      plugin_manager = '🌊', -- Text to display when managing plugins (Empty string to disable)
+      lsp_manager = '🌊', -- Text to display when managing LSP servers (Empty string to disable)
+      workspace = '', -- Text to display when in a workspace (Empty string to disable)
     },
     buttons = {
       {

@@ -49,6 +49,13 @@ return { -- Fuzzy Finder (files, lsp, etc)
     require('telescope').setup {
       -- You can put your default mappings / updates / etc. in here
       --  All the info you're looking for is in `:help telescope.setup()`
+      defaults = {
+        layout_config = {
+          horizontal = {
+            preview_cutoff = 60,
+          },
+        },
+      },
       --
       -- defaults = {
       --   mappings = {
@@ -56,6 +63,7 @@ return { -- Fuzzy Finder (files, lsp, etc)
       --   },
       -- },
       -- pickers = {}
+
       extensions = {
         ['ui-select'] = {
           require('telescope.themes').get_dropdown(),

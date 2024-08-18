@@ -8,7 +8,7 @@ if [ "$SENDER" = "svim_update" ]; then
   DRAW_CMD=off
   COLOR=$WHITE
   case "$MODE" in
-    "I") ICON="$MODE_INSERT" DRAWING=off
+    "I") ICON="$MODE_INSERT" DRAWING=on
     ;;
     "N") ICON="$MODE_NORMAL"
     ;;
