@@ -104,6 +104,9 @@ return { -- LSP Configuration & Plugins
         },
       },
     }
+    require('mason-lspconfig').setup_handlers {
+      ['rust_analyzer'] = function() end,
+    }
 
     -- Ensure the servers and tools above are installed
     --  To check the current status of installed tools and/or manually install

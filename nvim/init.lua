@@ -134,6 +134,12 @@ require('lazy').setup {
   {
     'nvim-treesitter/nvim-treesitter-context',
   },
+  {
+    'rcarriga/nvim-dap-ui',
+  },
+  {
+    'nvim-neotest/nvim-nio',
+  },
   -- lazy.nvim
   { import = 'plugins' },
 }
