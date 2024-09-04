@@ -1,5 +1,8 @@
 #!/bin/bash
 
+killall stats_provider
+$CONFIG_DIR/stats_provider/stats_provider --disk usage --memory ram_usage &
+
 cpu_top=(
   label.font="$FONT:Semibold:7"
   label=CPU
@@ -10,7 +13,7 @@ cpu_top=(
 )
 
 cpu_percent=(
-  label.font="$FONT:Heavy:12"
+  label.font="$FONT:Heavy:10"
   label=CPU
   y_offset=-4
   # padding_right=15
@@ -40,6 +43,24 @@ cpu_user=(
   background.color=$TRANSPARENT
 )
 
+ram_percent=(
+  label.font="$FONT:Heavy:7"
+  label=RAM
+  icon.drawing=off
+  width=0
+  padding_right=20
+  y_offset=-14
+)
+
+disk_percent=(
+  label.font="$FONT:Heavy:7"
+  label=Disk
+  padding_right=0
+  y_offset=-14
+  width=0
+  icon.drawing=off
+)
+
 sketchybar --add item cpu.top right              \
            --set cpu.top "${cpu_top[@]}"         \
                                                  \
@@ -50,4 +71,10 @@ sketchybar --add item cpu.top right              \
            --set cpu.sys "${cpu_sys[@]}"         \
                                                  \
            --add graph cpu.user right 75         \
-           --set cpu.user "${cpu_user[@]}"
+           --set cpu.user "${cpu_user[@]}"\
+           --add item disk_usage right \
+           --set disk_usage script="sketchybar --set disk_usage label=\$DISK_USAGE" "${disk_percent[@]}" \
+           --subscribe disk_usage system_stats\
+           --add item ram_usage right \
+           --set ram_usage script="sketchybar --set ram_usage label=\$RAM_USAGE" "${ram_percent[@]}" \
+           --subscribe ram_usage system_stats
