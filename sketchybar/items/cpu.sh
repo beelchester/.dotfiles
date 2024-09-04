@@ -48,14 +48,14 @@ ram_percent=(
   label=RAM
   icon.drawing=off
   width=0
-  padding_right=20
+  padding_right=23.5
   y_offset=-14
 )
 
 disk_percent=(
   label.font="$FONT:Heavy:7"
   label=Disk
-  padding_right=0
+  padding_right=3.5
   y_offset=-14
   width=0
   icon.drawing=off
