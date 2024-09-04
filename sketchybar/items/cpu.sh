@@ -48,7 +48,7 @@ ram_percent=(
   label=RAM
   icon.drawing=off
   width=0
-  padding_right=23.5
+  padding_right=17
   y_offset=-14
 )
 
@@ -73,8 +73,8 @@ sketchybar --add item cpu.top right              \
            --add graph cpu.user right 75         \
            --set cpu.user "${cpu_user[@]}"\
            --add item disk_usage right \
-           --set disk_usage script="sketchybar --set disk_usage label=\$DISK_USAGE" "${disk_percent[@]}" \
+           --set disk_usage script='DISK_USAGE=$(echo $DISK_USAGE | sed "s/.$//"); sketchybar --set disk_usage label=$DISK_USAGE' "${disk_percent[@]}" \
            --subscribe disk_usage system_stats\
            --add item ram_usage right \
-           --set ram_usage script="sketchybar --set ram_usage label=\$RAM_USAGE" "${ram_percent[@]}" \
+           --set ram_usage script='RAM_USAGE=$(echo $RAM_USAGE | sed "s/.$//"); sketchybar --set ram_usage label=$RAM_USAGE' "${ram_percent[@]}" \
            --subscribe ram_usage system_stats
