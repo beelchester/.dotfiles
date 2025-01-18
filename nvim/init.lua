@@ -3,7 +3,14 @@ vim.g.maplocalleader = ' '
 vim.g.loaded_netrwPlugin = 1
 vim.g.loaded_netrw = 1
 -- vim.cmd 'autocmd VimEnter * :Neotree toggle'
-vim.cmd 'autocmd VimEnter * :Alpha'
+local args = vim.fn.argv()
+-- Don't start alpha window if file was provided
+if #args == 0 then
+  vim.cmd 'autocmd VimEnter * :Alpha'
+end
+-- Turn off Supermaven and copilot by default
+vim.cmd 'autocmd VimEnter * :SupermavenStop'
+vim.cmd 'autocmd VimEnter * :Copilot disable'
 -- vim.keymap.set({ 'n', 'v', 'i', 'x' }, '<M-w>', '<C-,>') -- don't remember why I did this lol
 
 vim.opt.conceallevel = 1
@@ -30,6 +37,12 @@ vim.opt.hlsearch = true
 -- :set ts=4 sw=4
 -- changing only sw might be enough for manual change in tab width space
 
+-- tab change
+vim.keymap.set('n', '<leader>tn', '<Cmd>tabnext<CR>', { desc = 'Next tab' })
+vim.keymap.set('n', '<leader>tb', '<Cmd>tabprevious<CR>', { desc = 'Previous tab' })
+vim.keymap.set('n', '<leader>ta', '<Cmd>tabnew<CR>', { desc = 'New tab' })
+vim.keymap.set('n', '<leader>su', '<Cmd>SupermavenToggle<CR>', { desc = 'Toggle Supermaven' })
+vim.keymap.set('n', '<leader>rs', '<Cmd>SupermavenRestart<CR>', { desc = 'Restart Supermaven' })
 -- substitue word under cursor in whole file
 vim.keymap.set('n', '<leader>sb', [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = 'Substitute word' })
 vim.keymap.set('n', '<leader>sp', '<Cmd>vsplit<CR>', { desc = 'Vertical split' })
@@ -47,6 +60,8 @@ vim.keymap.set({ 'n', 'v' }, '<leader>y', [["+y]])
 vim.keymap.set('n', '<leader>y', [["+Y]])
 vim.keymap.set('n', '<C-d>', '<C-d>zz')
 vim.keymap.set('n', '<C-u>', '<C-u>zz')
+
+vim.keymap.set('n', '<leader>gb', '<Cmd>Git blame<CR>')
 
 vim.keymap.set('n', '<leader>qs', function()
   require('persistence').load()
@@ -70,6 +85,14 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 
+-- Obsidian keybinds
+vim.keymap.set('n', '<leader>ob', ':ObsidianBacklinks<CR>')
+vim.keymap.set('n', '<leader>ot', ':ObsidianTags<CR>')
+vim.keymap.set('n', '<leader>od', ':ObsidianToday<CR>')
+vim.keymap.set('n', '<leader>ol', ':ObsidianLinks<CR>')
+
+vim.keymap.set('n', '<leader>z', ':ZenMode<CR>')
+
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
 if not vim.loop.fs_stat(lazypath) then
   local lazyrepo = 'https://github.com/folke/lazy.nvim.git'
@@ -90,10 +113,27 @@ require('lazy').setup {
     'folke/todo-comments.nvim',
     event = 'VimEnter',
     dependencies = { 'nvim-lua/plenary.nvim' },
-    opts = { signs = false, keywords = {
-      TODO = { color = 'info' },
-      NOTE = { color = 'hint' },
-    } },
+    opts = {
+      signs = true,
+      keywords = {
+        FIX = {
+          icon = ' ', -- icon used for the sign, and in search results
+          color = 'error', -- can be a hex color, or a named color (see below)
+          alt = { 'FIXME', 'BUG', 'FIXIT', 'ISSUE' }, -- a set of other keywords that all map to this FIX keywords
+          -- signs = false, -- configure signs for some keywords individually
+        },
+        TODO = { icon = ' ', color = 'info' },
+        HACK = { icon = ' ', color = 'warning' },
+        WARN = { icon = ' ', color = 'warning', alt = { 'WARNING', 'XXX' } },
+        PERF = { icon = ' ', alt = { 'OPTIM', 'PERFORMANCE', 'OPTIMIZE' } },
+        NOTE = { icon = ' ', color = 'hint', alt = { 'INFO' } },
+        TEST = { icon = '⏲ ', color = 'test', alt = { 'TESTING', 'PASSED', 'FAILED' } },
+      },
+      --   keywords = {
+      --   TODO = { color = 'info' },
+      --   NOTE = { color = 'hint' },
+      -- }
+    },
   },
 
   {

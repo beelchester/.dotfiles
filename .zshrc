@@ -1,28 +1,28 @@
-clear
+clear # stupid macos
 
-# If you come from bash you might have to change your $PATH.
 export PATH=$HOME/bin:/usr/local/bin:$PATH
 export PATH=/Users/sahil/.local/bin:$PATH
-export PATH="${HOME}/Library/Android/sdk/tools:${HOME}/Library/Android/sdk/platform-tools:${PATH}"
+# export PATH="${HOME}/Library/Android/sdk/tools:${HOME}/Library/Android/sdk/platform-tools:${PATH}"
 export PATH="$PATH:${HOME}/flutter/bin"
 export PATH="$PATH:${HOME}/go/bin"
 export PATH="$PATH:${HOME}/.tmux/plugins/tmuxifier/bin"
-export VCPKG_ROOT=$HOME/vcpkg
-export PATH=$VCPKG_ROOT:$PATH
-export ANDROID_NDK_HOME=/Users/sahil/Library/Android/sdk/ndk/26.1.10909125
-export PATH=$HOME/gccrs-install/bin:$PATH
+export PATH=$PATH:~/.cargo/bin/
+# export VCPKG_ROOT=$HOME/vcpkg
+# export PATH=$VCPKG_ROOT:$PATH
+export LIBRARY_PATH="$LIBRARY_PATH:$(brew --prefix)/lib"
+
+# stops brew auto update
+export HOMEBREW_NO_AUTO_UPDATE=1
+
+# export FFMPEG_INCLUDE_DIR="/Users/sahil/Developer/ffmpeg_builds/ffmpeg/include/"
+# export FFMPEG_LIB_DIR="/Users/sahil/Developer/ffmpeg_builds/ffmpeg/lib/"
 
 bindkey '^R' history-incremental-search-backward
 
-# zsh autocomplete
-# source /Users/sahil/zsh-autocomplete/zsh-autocomplete.plugin.zsh
-
-
 # Path to your oh-my-zsh installation.
-export ZSH="$HOME/.oh-my-zsh"
+# export ZSH="$HOME/.oh-my-zsh"
 alias n='nvim'
 alias nrd='npm run dev'
-alias jfr='just && flutter run -d macos'
 alias ts='~/tmux-sessionizer'
 alias t='tmux'
 alias ta='tmux a'
@@ -30,16 +30,41 @@ alias tk='tmux kill-session -t'
 alias tn='tmuxifier new-session'
 alias te='tmuxifier edit-session'
 alias tks='tmux kill-server'
-alias cdf='source /Users/sahil/cdf.sh'
+alias :q='clear'
+alias :qa='exit'
+alias la='ls -la'
+
+alias to="~/tmux-obsidian"
+alias no="n /Volumes/VERACRYPT/Obsidian/saaa/"
+
+# git aliases
+alias gst='git status'
+alias ga='git add'
+alias gcm='git commit -m'
+alias gcsm='git commit -s -m'
+alias glog='git log'
+alias gcl="git clone"
+
+alias td="todoist"
 
 eval "$(tmuxifier init -)"
-
 
 export EDITOR="nvim"
 
 ZSH_THEME="robbyrussell"
 
-plugins=(git zsh-autosuggestions)
+# source $ZSH/oh-my-zsh.sh # don't need this, unnecessary bloatware causing startup slowdown
+
+# plugins=(git zsh-autosuggestions)
+# using brew version instead of oh-my-zsh
+source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+# zsh completion
+# Using oh-my-zsh's function without loading oh-my-zsh.. with some color modification
+autoload compinit
+compinit
+source $HOME/zsh-completions.zsh
+
 ZSH_AUTOSUGGEST_STRATEGY=(history completion)
 ZSH_AUTOSUGGEST_HIGHLIGHT_STYLE="fg=#FAB387"
 FZF_DEFAULT_OPTS=" \
@@ -47,42 +72,21 @@ FZF_DEFAULT_OPTS=" \
 --color=fg:#cdd6f4,header:#f38ba8,info:#cba6f7,pointer:#f5e0dc \
 --color=marker:#f5e0dc,fg+:#cdd6f4,prompt:#cba6f7,hl+:#f38ba8"
 
-source $ZSH/oh-my-zsh.sh
 
-# >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-# __conda_setup="$('/opt/homebrew/Caskroom/miniforge/base/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-# if [ $? -eq 0 ]; then
-#     eval "$__conda_setup"
-# else
-#     if [ -f "/opt/homebrew/Caskroom/miniforge/base/etc/profile.d/conda.sh" ]; then
-#         . "/opt/homebrew/Caskroom/miniforge/base/etc/profile.d/conda.sh"
-#     else
-#         export PATH="/opt/homebrew/Caskroom/miniforge/base/bin:$PATH"
-#     fi
-# fi
-# unset __conda_setup
-# <<< conda initialize <<<
-
-export PATH="/Applications/Postgres.app/Contents/Versions/latest/bin:$PATH"
+# https://github.com/starship/starship/issues/3418#issuecomment-2477375663
+if [[ "${widgets[zle-keymap-select]#user:}" == "starship_zle-keymap-select" || \
+      "${widgets[zle-keymap-select]#user:}" == "starship_zle-keymap-select-wrapped" ]]; then
+    zle -N zle-keymap-select "";
+fi
 
 eval "$(starship init zsh)"
 eval "$(zoxide init zsh)"
 
-# bun completions
-[ -s "/Users/sahil/.bun/_bun" ] && source "/Users/sahil/.bun/_bun"
-
-# bun
-export BUN_INSTALL="$HOME/.bun"
-export PATH="$BUN_INSTALL/bin:$PATH"
 bindkey -v # vi mode
 bindkey -M viins jk vi-cmd-mode # jk to exit insert mode
+bindkey -v '^?' backward-delete-char # https://unix.stackexchange.com/questions/290392/backspace-in-zsh-stuck
 source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
-
-
-# # Load Angular CLI autocompletion.
-# source <(ng completion script)
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 export FZF_DEFAULT_COMMAND="fd --hidden --strip-cwd-prefix --exclude .git"
@@ -120,5 +124,17 @@ _fzf_comprun() {
   esac
 }
 
-eval $(thefuck --alias)
-eval $(thefuck --alias fk)
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+
+. "$HOME/.atuin/bin/env"
+
+export ATUIN_NOBIND="true"
+eval "$(atuin init zsh)"
+
+bindkey '^f' atuin-search
+
+bindkey -s '^O' 'ts^M'
+bindkey -s '^w' 'ls^M'
+bindkey -s '^p' 'open .^M'

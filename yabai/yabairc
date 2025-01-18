@@ -7,8 +7,6 @@ yabai -m config \
     bottom_padding 10 \
     left_padding 10 \
     right_padding 10 \
-    window_animation_duration 0.05 \
-    window_animation_frame_rate 120 \
     layout bsp \
     window_placement second_child \
     mouse_follows_focus on \
@@ -16,6 +14,9 @@ yabai -m config \
     mouse_action1 move \
     mouse_action2 resize \
     mouse_drop_action swap
+
+    #window_animation_duration 0.05 \
+    #window_animation_frame_rate 120 \
 
 #focus_follows_mouse autoraise \
 # focus window after active space changes

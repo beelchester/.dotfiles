@@ -85,7 +85,7 @@ return { -- LSP Configuration & Plugins
           '--offset-encoding=utf-16',
         },
       },
-      tsserver = {},
+      -- tsserver = {},
       tailwindcss = {},
       lua_ls = {
         settings = {

@@ -1,53 +1,97 @@
+-- FIXME: blacklist not working
+local blacklist = {
+  '/Volumes/VERACRYPT/Obsidian/saaa/',
+  'saaa',
+}
+
+local is_blacklisted = function(opts)
+  --TODO: Try to log this workspace_name
+  return vim.tbl_contains(blacklist, opts.workspace_name)
+end
+
+
 return {
   'vyfor/cord.nvim',
-  build = './build',
+  branch = 'client-server',
+  build = ':Cord fetch',
   -- event = 'VeryLazy',
+
   opts = {
-    usercmds = true, -- Enable user commands
-    timer = {
-      enable = true, -- Enable automatically updating presence
-      interval = 1500, -- Interval between presence updates in milliseconds (min 500)
-      reset_on_idle = true, -- Reset start timestamp on idle
-      reset_on_change = false, -- Reset start timestamp on presence change
-    },
     editor = {
-      image = nil, -- Image ID or URL in case a custom client id is provided
-      client = 'neovim', -- vim, neovim, lunarvim, nvchad, astronvim or your application's client id
-      tooltip = 'Chad Editor', -- Text to display when hovering over the editor's image
+      client = 'neovim',
+      tooltip = 'Chad editor',
+      icon = nil,
     },
     display = {
-      show_time = false, -- Display start timestamp
-      show_repository = false, -- Display 'View repository' button linked to repository url, if any
-      show_cursor_position = true, -- Display line and column number of cursor's position
-      swap_fields = true, -- If enabled, workspace is displayed first
-      workspace_blacklist = {}, -- List of workspace names to hide
+      theme = 'onyx',
+      swap_fields = false,
+      swap_icons = false,
     },
-    lsp = {
-      show_problem_count = true, -- Display number of diagnostics problems
-      severity = 1, -- 1 = Error, 2 = Warning, 3 = Info, 4 = Hint
-      scope = 'buffer', -- buffer or workspace
+    timestamp = {
+      enabled = false,
+      reset_on_idle = true,
+      reset_on_change = false,
     },
     idle = {
-      enable = true, -- Enable idle status
-      show_status = false, -- Display idle status, disable to hide the rich presence on idle
-      timeout = 2000, -- Timeout in milliseconds after which the idle status is set, 0 to display immediately
-      disable_on_focus = false, -- Do not display idle status when neovim is focused
-      text = 'Idle', -- Text to display when idle
-      tooltip = '💤', -- Text to display when hovering over the idle image
+      enabled = true,
+      timeout = 300000,
+      show_status = false,
+      ignore_focus = true,
+      smart_idle = true,
+      details = 'Idling',
+      state = nil,
+      tooltip = '💤',
+      icon = nil,
     },
     text = {
-      viewing = '🌊', -- Text to display when viewing a readonly file
-      editing = '🌊', -- Text to display when editing a file
-      file_browser = '🌊', -- Text to display when browsing files (Empty string to disable)
-      plugin_manager = '🌊', -- Text to display when managing plugins (Empty string to disable)
-      lsp_manager = '🌊', -- Text to display when managing LSP servers (Empty string to disable)
-      workspace = '', -- Text to display when in a workspace (Empty string to disable)
+      viewing = function(opts) return string.format('🌊 %s:%s', opts.cursor_line, opts.cursor_char) end,
+      editing = function(opts) return string.format('🌊 %s:%s', opts.cursor_line, opts.cursor_char) end,
+      file_browser = function() return 'Browsing files' end,
+      plugin_manager = function() return 'Managing plugins' end,
+      lsp_manager = function() return 'Configuring LSP' end,
+      docs = function() return 'Reading doc 🤓' end,
+      vcs = function() return 'Committing changes' end,
+      workspace = function()
+        local hour = tonumber(os.date('%H'))
+        local status =
+        hour >= 22 and '🌙 Late night coding' or
+        hour >= 18 and '🌆 Evening session' or
+        hour >= 12 and '☀️ Afternoon coding' or
+        hour >= 5 and '🌅 Morning productivity' or
+        '🌙 Midnight hacking'
+        return string.format('%s', status) end,
+      dashboard = 'Home',
     },
-    buttons = {
-      {
-        label = 'View Repository', -- Text displayed on the button
-        url = 'git', -- URL where the button leads to ('git' = Git repository URL)
+    buttons = nil,
+    assets = nil,
+    variables = nil,
+    hooks = {
+      on_ready = nil,
+      on_update = nil,
+      on_activity = nil,
+      on_idle = nil,
+      on_workspace_change = function(opts)
+        if is_blacklisted(opts) then
+          opts.manager:skip_update() -- preferably skip updating the current activity
+          opts.manager:hide()
+        else
+          opts.manager:resume()
+        end
+      end,
+      on_disconnect = nil,
+    },
+    advanced = {
+      plugin = {
+        log_level = vim.log.levels.INFO,
+        autocmds = true,
       },
+      server = {
+        pipe_path = nil,
+        executable_path = nil,
+        timeout = 60000,
+      },
+      cursor_update_mode = 'on_move',
+      variables_in_functions = false,
     },
   },
 }
