@@ -19,13 +19,13 @@ return {
     --   '                                                     ',
     -- }
 
-    vim.api.nvim_set_hl(0, "NeovimDashboardLogo1", { fg = "#311B92" }) -- Indigo
-    vim.api.nvim_set_hl(0, "NeovimDashboardLogo2", { fg = "#512DA8" }) -- Deep Purple
-    vim.api.nvim_set_hl(0, "NeovimDashboardLogo3", { fg = "#673AB7" }) -- Deep Purple
-    vim.api.nvim_set_hl(0, "NeovimDashboardLogo4", { fg = "#9575CD" }) -- Medium Purple
-    vim.api.nvim_set_hl(0, "NeovimDashboardLogo5", { fg = "#B39DDB" }) -- Light Purple
-    vim.api.nvim_set_hl(0, "NeovimDashboardLogo6", { fg = "#D1C4E9" }) -- Very Light Purple
-    vim.api.nvim_set_hl(0, "NeovimDashboardUsername", { fg = "#D1C4E9" }) -- light purple
+    vim.api.nvim_set_hl(0, "NeovimDashboardLogo1", { fg = "#cba6f7" })
+    vim.api.nvim_set_hl(0, "NeovimDashboardLogo2", { fg = "#cba6f7" })
+    vim.api.nvim_set_hl(0, "NeovimDashboardLogo3", { fg = "#eba0ac" })
+    vim.api.nvim_set_hl(0, "NeovimDashboardLogo4", { fg = "#fab387" })
+    vim.api.nvim_set_hl(0, "NeovimDashboardLogo5", { fg = "#fab387" })
+    vim.api.nvim_set_hl(0, "NeovimDashboardLogo6", { fg = "#fab387" })
+    vim.api.nvim_set_hl(0, "NeovimDashboardUsername", { fg = "#f38ba8" })
 
     dashboard.section.header.type = "group"
     dashboard.section.header.val = {
