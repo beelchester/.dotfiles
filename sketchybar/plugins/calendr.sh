@@ -1,107 +1,178 @@
 #!/bin/bash
 
-# === Configuration ===
-ICS_URL= "https://calendar.google.com/calendar/ical/a471efc31871f08d6b49076e8661d94eaf6d992a948813a5d6fafa06906f8664%40group.calendar.google.com/public/basic.ics"
 ICS_FILE="calendar.ics"
 
-source "$HOME/.config/sketchybar/colors.sh"
+# NOTE: Required to handle time after midnight
+OFFSET=60000
 
-# === Download the ICS File ===
-curl -s "$ICS_URL" -o "$ICS_FILE"
-
-if [ $? -ne 0 ]; then
-  echo "Failed to download the ICS file."
-  exit 1
-fi
-
-# === Get Today's and Tomorrow's Dates in YYYYMMDD Format ===
 TODAY=$(date +"%Y%m%d")
 TOMORROW=$(date -v+1d +"%Y%m%d")
+CURRENTTIME=$(date +"%H%M%S")
+CURRENTTIME=${CURRENTTIME#0}  # Remove leading zero from CURRENTTIME
+if [ "$CURRENTTIME" -lt "$OFFSET" ]; then
+  CURRENTTIME=$((CURRENTTIME + (240000 - OFFSET)))
+else
+  CURRENTTIME=$((CURRENTTIME - OFFSET))
+fi
+DAY=$(date +"%a")
 
 declare -a TODAY_EVENTS=()
-
 declare -a TOMORROW_EVENTS=()
-echo "Parsing events for today and tomorrow..."
+declare -a WEEKDAYS=()
+declare -a WEEKENDS=()
+declare -a DAILY=()
+declare -a CURRENT_EVENT=()
+declare -a NEXT_EVENT=()
+declare -a FINAL_TODAY_EVENTS=()
 
 EVENT_DATE=""
 EVENT_SUMMARY=""
+EVENT_RRULE=""
+EVENT_START_TIME=""
+EVENT_END_TIME=""
+
+NUM_EVENTS=0
 
 while IFS= read -r line; do
-  # Check for the start of an event
+
   if [[ "$line" == "BEGIN:VEVENT" ]]; then
     EVENT_DATE=""
     EVENT_SUMMARY=""
-  elif [[ "$line" == DTSTART* ]]; then
-    # Extract date in YYYYMMDD format
+    EVENT_RRULE=""
+    EVENT_START_TIME=""
+    EVENT_END_TIME=""
+
+  elif [[ "$line" == RRULE* ]]; then
+    if [[ "$line" =~ (^|[^A-Za-z])DAILY([^A-Za-z]|$) ]]; then
+      EVENT_RRULE="DAILY"
+    fi
+    if [[ "$line" =~ BYDAY=([^;]*) ]]; then
+      BYDAY="${BASH_REMATCH[1]}"
+      if [[ "$BYDAY" == *"SU"* ]]; then
+          EVENT_RRULE="WEEKENDS"
+        else
+        EVENT_RRULE="WEEKDAYS"
+      fi
+      fi
+
+  elif [[ "$line" == DTSTART* || "$line" == DTEND* ]]; then
     if [[ "$line" =~ DTSTART[^:]*:([0-9]{8}) ]]; then
       EVENT_DATE="${BASH_REMATCH[1]}"
     elif [[ "$line" =~ DTSTART[^:]*:([0-9]{8})T ]]; then
       EVENT_DATE="${BASH_REMATCH[1]}"
     fi
+
+    if [[ "$line" =~ DTSTART[^:]*:[0-9]{8}T([0-9]{6}) ]]; then
+      EVENT_START_TIME="${BASH_REMATCH[1]}"
+EVENT_START_TIME=${EVENT_START_TIME#0}
+if [ "$EVENT_START_TIME" -lt "$OFFSET" ]; then
+  EVENT_START_TIME=$((EVENT_START_TIME + (240000 - OFFSET)))
+else
+  EVENT_START_TIME=$((EVENT_START_TIME - OFFSET))
+fi
+    fi
+
+    if [[ "$line" =~ DTEND[^:]*:([0-9]{8})T([0-9]{6}) ]]; then
+      EVENT_END_TIME="${BASH_REMATCH[2]}"
+      EVENT_END_TIME=${EVENT_END_TIME#0}
+if [ "$EVENT_END_TIME" -lt "$OFFSET" ]; then
+  EVENT_END_TIME=$((EVENT_END_TIME + (240000 - OFFSET)))
+else
+  EVENT_END_TIME=$((EVENT_END_TIME - OFFSET))
+fi
+    fi
+
   elif [[ "$line" == SUMMARY* ]]; then
-    # Extract event summary
     EVENT_SUMMARY="${line#SUMMARY:}"
-  elif [[ "$line" == "END:VEVENT" ]]; then
-    # Check if the event is today or tomorrow
+    EVENT_SUMMARY="${EVENT_START_TIME};${EVENT_END_TIME};${EVENT_SUMMARY}"
+
+  elif [[ "$line" == END:VEVENT* ]]; then
     if [[ "$EVENT_DATE" == "$TODAY" ]]; then
       TODAY_EVENTS+=("$EVENT_SUMMARY")
     fi
     if [[ "$EVENT_DATE" == "$TOMORROW" ]]; then
-      # Combine summary and date
       TOMORROW_EVENTS+=("$EVENT_SUMMARY")
     fi
+    if [[ "$EVENT_RRULE" == "WEEKENDS" ]]; then
+      WEEKENDS+=("$EVENT_SUMMARY")
+    fi
+    if [[ "$EVENT_RRULE" == "WEEKDAYS" ]]; then
+      WEEKDAYS+=("$EVENT_SUMMARY")
+    fi
+    if [[ "$EVENT_RRULE" == "DAILY" ]]; then
+      DAILY+=("$EVENT_SUMMARY")
+    fi
+    NUM_EVENTS=$((NUM_EVENTS+1))
+    fi
+  done <"$ICS_FILE"
+
+for event in "${TODAY_EVENTS[@]}"; do
+  FINAL_TODAY_EVENTS+=("$event")
+done
+
+for event in "${WEEKENDS[@]}"; do
+  if [ "$DAY" == "Sat" ] || [ "$DAY" == "Sun" ]; then
+    FINAL_TODAY_EVENTS+=("$event")
   fi
-done <"$ICS_FILE"
+done	
+for event in "${WEEKDAYS[@]}"; do
+  if [ "$DAY" != "Sat" ] && [ "$DAY" != "Sun" ]; then
+    FINAL_TODAY_EVENTS+=("$event")
+  fi
+done
+for event in "${DAILY[@]}"; do
+  FINAL_TODAY_EVENTS+=("$event")
+done
 
-# sketchybar --set $NAME icon="􀉉 $(date '+%a %d. %b')" label="$(date '+%I:%M %p')"
-sketchybar --set $NAME \
-  icon="􀉉 $(date '+%a %d. %b')" \
-  label="$(date '+%I:%M %p')" \
-  click_script="sketchybar --set $NAME popup.drawing=toggle"
+UPCOMING_EVENT=""
+SMALLEST_TIME_DIFF=999999
+UPCOMING_EVENT_START=""
+LABEL=""
 
-if ((${#TODAY_EVENTS[@]})); then
-  sketchybar --add item calendr.date popup.$NAME \
-    --set calendr.date \
-    label.color=$WHITE \
-    label.font.size=14 \
-    label.align=left \
-    label="Today"
+for event in "${FINAL_TODAY_EVENTS[@]}"; do
+  IFS=';' read -ra array <<< "$event"
+  START_TIME="${array[0]}"
+  END_TIME="${array[1]}"
+  EVENT_NAME="${array[2]}"
+  # Remove leading and trailing whitespace
+  EVENT_NAME=$(echo "$EVENT_NAME" | tr -d '\n' | sed 's/^[[:space:]]*//;s/[[:space:]]*$//')
 
-  sketchybar --remove '/^calendar.event[0-9]+$/'
-  index=0
-  for today_event in "${TODAY_EVENTS[@]}"; do
-    index=$((index + 1))
-    echo $today_event
-    sketchybar --add item calendr.event${index} popup.$NAME \
-      --set calendr.event${index} \
-      label.color=$WHITE \
-      label.font="JetBrainsMono Nerd Font:Italic:12.0" \
-      label.max_chars=16 \
-      scroll_texts=on \
-      label.align=center \
-      label="$today_event"
-  done
+    # Trim event name to 14 chars + ...
+  # if [ ${#EVENT_NAME} -gt 14 ]; then
+  #   EVENT_NAME="${EVENT_NAME:0:10}..."
+  # fi
+
+  if [ "$START_TIME" -le "$CURRENTTIME" ] && [ "$END_TIME" -ge "$CURRENTTIME" ]; then
+    CURRENT_EVENT+=("${array[2]}")
+    END_SEC=$(date -j -f '%Y-%m-%d %H%M%S' "2024-10-20 $END_TIME" '+%s')
+    CURRENT_SEC=$(date -j -f '%Y-%m-%d %H%M%S' "2024-10-20 $CURRENTTIME" '+%s')
+    DIFF_SEC=$((END_SEC - CURRENT_SEC))
+    MIN_DIFF=$((DIFF_SEC / 60))
+    if [ "$MIN_DIFF" -lt "60" ]; then
+      LABEL="$EVENT_NAME ends in $(((DIFF_SEC / 60) + 1)) minutes"
+  else
+    LABEL="$EVENT_NAME ends in $(awk -v diff=$DIFF_SEC 'BEGIN {printf "%.1f", diff/3600}') hours"
+    fi
+  elif [ "$START_TIME" -gt "$CURRENTTIME" ]; then
+    TIME_DIFF=$((START_TIME - CURRENTTIME))
+    if [ "$TIME_DIFF" -lt "$SMALLEST_TIME_DIFF" ]; then
+      SMALLEST_TIME_DIFF=$TIME_DIFF
+      UPCOMING_EVENT=$EVENT_NAME
+      UPCOMING_EVENT_START=$START_TIME
+    fi
+  fi
+done
+
+# If no current event was found, show the upcoming one
+if [ ${#CURRENT_EVENT[@]} -eq 0 ] && [ -n "$UPCOMING_EVENT" ]; then
+    UP_SEC=$(date -j -f '%Y-%m-%d %H%M%S' "2024-10-20 $UPCOMING_EVENT_START" '+%s')
+    CURRENT_SEC=$(date -j -f '%Y-%m-%d %H%M%S' "2024-10-20 $CURRENTTIME" '+%s')
+    DIFF_SEC=$((END_SEC - CURRENT_SEC))
+    if [ "$MIN_DIFF" -lt "60" ]; then
+    LABEL="$EVENT_NAME starts in $(((DIFF_SEC / 60) + 1)) minutes"
+  else
+    LABEL="$EVENT_NAME starts in $(awk -v diff=$DIFF_SEC 'BEGIN {printf "%.1f", diff/3600}') hours"
+    fi
 fi
 
-if ((${#TOMORROW_EVENTS[@]})); then
-  sketchybar --add item calendar.date2 popup.$NAME \
-    --set calendar.date2 \
-    label.color=$WHITE \
-    label.font.size=14 \
-    label.align=left \
-    label="$(date -v+1d '+%d. %b ')"
-
-  sketchybar --remove '/^calendar.$NAME[0-9]+$/'
-  index=0
-  for today_event in "${TOMORROW_EVENTS[@]}"; do
-    index=$((index + 1))
-    echo $today_event
-    sketchybar --add item calendar.tevent${index} popup.$NAME --set calendar.tevent${index} \
-      label.color=$WHITE \
-      label.font="JetBrainsMono Nerd Font:Italic:12.0" \
-      label.max_chars=16 \
-      scroll_texts=on \
-      label.align=center \
-      label="$today_event"
-  done
-fi
+sketchybar --set $NAME label="$LABEL"
