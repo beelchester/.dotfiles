@@ -5,6 +5,7 @@ media=(
   icon.background.image.corner_radius=9
   icon.background.image.padding_right=5
   script="$PLUGIN_DIR/media.sh"
+  label.width=0
   label.max_chars=15
   scroll_texts=off
   updates=on
@@ -12,4 +13,4 @@ media=(
 
 sketchybar --add item media right \
            --set media "${media[@]}" \
-           --subscribe media media_change
+           --subscribe media media_change mouse.clicked

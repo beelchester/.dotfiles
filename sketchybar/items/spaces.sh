@@ -19,9 +19,9 @@ do
     padding_left=4
     padding_right=2
     label.padding_right=20
-    icon.highlight_color=$RED
+    icon.highlight_color=$MAGENTA
     label.color=$GREY
-    label.highlight_color=$WHITE
+    label.highlight_color=$PEACH
     label.font="sketchybar-app-font:Regular:16.0"
     label.y_offset=-1
     background.color=$BACKGROUND_1
@@ -35,15 +35,16 @@ do
 done
 
 space_creator=(
-  icon=􀆊
-  icon.font="$FONT:Heavy:16.0"
-  padding_left=10
-  padding_right=8
+  # icon=􀆊
+  # icon.font="$FONT:Heavy:16.0"
+  # padding_left=10
+  # padding_right=8
   label.drawing=off
+  icon.drawing=off
   display=active
-  click_script='yabai -m space --create'
+  # click_script='yabai -m space --create'
   script="$PLUGIN_DIR/space_windows.sh"
-  icon.color=$WHITE
+  # icon.color=$WHITE
 )
 
 sketchybar --add item space_creator left               \

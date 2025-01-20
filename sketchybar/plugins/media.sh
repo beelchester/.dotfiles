@@ -12,7 +12,30 @@ update_media() {
   fi
 }
 
+click() {
+  CURRENT_WIDTH="$(sketchybar --query $NAME | jq -r .label.width)"
+
+  WIDTH=0
+  PAD=false
+  if [ "$CURRENT_WIDTH" -eq "0" ]; then
+    WIDTH=dynamic
+    PAD=true
+  else 
+    PAD=false
+  fi
+
+  if $PAD; then
+    sketchybar --set $NAME label.padding_right=10
+  else
+    sketchybar --set $NAME label.padding_right=0
+  fi
+
+  sketchybar --animate sin 20 --set $NAME label.width="$WIDTH"
+}
+
 case "$SENDER" in
   "media_change") update_media
+  ;;
+  "mouse.clicked") click
   ;;
 esac

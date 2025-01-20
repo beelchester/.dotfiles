@@ -2,10 +2,12 @@
 
 front_app=(
   label.font="$FONT:Black:12.0"
+  # label.color=$MAGENTA
+  label.color=$PEACH
   icon.background.drawing=off
   display=active
   script="$PLUGIN_DIR/front_app.sh"
-  # click_script="open -a 'Mission Control'"
+  click_script="open -a 'Mission Control'"
 )
 
 sketchybar --add item front_app left         \
