@@ -9,12 +9,9 @@ local is_blacklisted = function(opts)
   return vim.tbl_contains(blacklist, opts.workspace_name)
 end
 
-
 return {
   'vyfor/cord.nvim',
   branch = 'client-server',
-  build = ':Cord fetch',
-  -- event = 'VeryLazy',
 
   opts = {
     editor = {
@@ -44,33 +41,67 @@ return {
       icon = nil,
     },
     text = {
-      viewing = function(opts) return string.format('🌊 %s:%s', opts.cursor_line, opts.cursor_char) end,
-      editing = function(opts) return string.format('🌊 %s:%s', opts.cursor_line, opts.cursor_char) end,
-      file_browser = function() return 'Browsing files' end,
-      plugin_manager = function() return 'Managing plugins' end,
-      lsp_manager = function() return 'Configuring LSP' end,
-      docs = function() return 'Reading doc 🤓' end,
-      vcs = function() return 'Committing changes' end,
-      workspace = function()
-        local hour = tonumber(os.date('%H'))
-        local status =
-        hour >= 22 and '🌙 Late night coding' or
-        hour >= 18 and '🌆 Evening session' or
-        hour >= 12 and '☀️ Afternoon coding' or
-        hour >= 5 and '🌅 Morning productivity' or
-        '🌙 Midnight hacking'
-        return string.format('%s', status) end,
+      viewing = function(opts)
+        return string.format('🌊 %s %s:%s', opts.filename, opts.cursor_line, opts.cursor_char)
+      end,
+      editing = function(opts)
+        local current_tag = vim.fn['tagbar#currenttag']('%s', '', 'f')
+
+        local diagnostics = vim.diagnostic.get(0, { severity = { min = vim.diagnostic.severity.ERROR } })
+
+        if #diagnostics > 0 then
+          return string.format('💀 %s errors %s %s:%s', #diagnostics, opts.filename, opts.cursor_line, opts.cursor_char)
+        end
+        return string.format('🌊 %s %s:%s %s', opts.filename, opts.cursor_line, opts.cursor_char, current_tag)
+      end,
+      file_browser = function()
+        return 'Browsing files'
+      end,
+      plugin_manager = function()
+        return 'Managing plugins'
+      end,
+      lsp_manager = function()
+        return 'Configuring LSP'
+      end,
+      docs = function()
+        return 'Reading doc 🤓'
+      end,
+      vcs = function()
+        return 'Committing changes'
+      end,
+      debug = function()
+        return 'Debugging'
+      end,
+      test = function()
+        return 'Testing'
+      end,
+      workspace = function(opts)
+        local function get_status()
+          local now = os.date '*t'
+          return (now.wday >= 2 and now.wday <= 6 and now.hour >= 12 and now.hour <= 20) and 'At work dont ping 🦖' or nil
+        end
+        local status = get_status()
+        if status then
+          return string.format('%s', status)
+        else
+          if opts.workspace == 'kairos' or opts.workspace == 'kairos-cli' then
+            return 'Side project time 🐼'
+          elseif opts.workspace == '.config' then
+            return 'Configuring workflow 🤡'
+          end
+          return ''
+        end
+      end,
       dashboard = 'Home',
     },
     buttons = nil,
     assets = nil,
-    variables = nil,
     hooks = {
       on_ready = nil,
       on_update = nil,
       on_activity = nil,
       on_idle = nil,
-      on_workspace_change = function(opts)
+      workspace_change = function(opts)
         if is_blacklisted(opts) then
           opts.manager:skip_update() -- preferably skip updating the current activity
           opts.manager:hide()

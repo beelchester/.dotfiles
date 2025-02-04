@@ -112,7 +112,7 @@ shift + cmd - w : yabai -m window --resize top:0:20
 shift + cmd - d : yabai -m window --resize right:-20:0
 
 # Close window
-alt - w: yabai -m window --close
+shift + alt - q : yabai -m window --close
 
 # pip + sticky window
 shift + alt - p : yabai -m window --toggle pip --toggle sticky
@@ -120,7 +120,7 @@ shift + alt - p : yabai -m window --toggle pip --toggle sticky
 # lock screen
 shift + alt - z : pmset displaysleepnow
 
-shift + cmd + alt - n : ray arc new-incognito-window
+shift + cmd + alt - n : zen --private-window
 
 
 # -- Starting/Stopping/Restarting Yabai --

@@ -28,36 +28,40 @@ return {
     workspaces = workspaces,
     disable_frontmatter = true,
     daily_notes = {
-      folder = "Daily Notes/" .. os.date("%Y/%m-%B/"),
+      folder = 'Daily Notes/' .. os.date '%Y/%m-%B/',
       -- folder: "Daily Notes/ YYYY/MM-MMMM/"
       -- Date format: YYYY-MM-DD-dddd"
-      date_format = "%Y-%m-%d-%A",
-      default_tags = { "daily-notes" },
-      template = "Templates/Daily note template.md",
+      date_format = '%Y-%m-%d-%A',
+      default_tags = { 'daily-notes' },
+      template = 'Templates/Daily note template.md',
     },
     templates = {
-      folder = "Templates/",
-      date_format = "%Y-%m-%d-%a",
-      time_format = "%H:%M",
+      folder = 'Templates/',
+      date_format = '%Y-%m-%d-%a',
+      time_format = '%H:%M',
     },
     note_path_func = function(spec)
       local path = spec.dir / tostring(spec.title)
-      return path:with_suffix(".md")
+      return path:with_suffix '.md'
     end,
   },
   mappings = {
-    ["gd"] = {
+    ['gd'] = {
       action = function()
-        return require("obsidian").util.gf_passthrough()
+        return require('obsidian').util.gf_passthrough()
       end,
       opts = { noremap = false, expr = true, buffer = true },
     },
   },
-  wiki_link_func = "use_alias_only",
-    note_id_func = function(title)
+  wiki_link_func = 'use_alias_only',
+  note_id_func = function(title)
     return title
   end,
-   attachments = {
-    img_folder = "02 Files",  -- This is the default
-  }
+  attachments = {
+    img_folder = '02 Files', -- This is the default
+  },
+  completion = {
+    nvim_cmp = true,
+    min_chars = 2,
+  },
 }
