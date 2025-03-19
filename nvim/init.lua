@@ -11,7 +11,15 @@ end
 -- Turn off Supermaven and copilot by default
 vim.cmd 'autocmd VimEnter * :SupermavenStop'
 vim.cmd 'autocmd VimEnter * :Copilot disable'
+vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
 -- vim.keymap.set({ 'n', 'v', 'i', 'x' }, '<M-w>', '<C-,>') -- don't remember why I did this lol
+
+vim.cmd [[
+  augroup CustomLineNrColors
+    autocmd!
+    autocmd ColorScheme * highlight LineNr guifg=#7f849c
+  augroup END
+]]
 
 vim.opt.conceallevel = 1
 vim.opt.number = true
@@ -48,7 +56,8 @@ vim.keymap.set('n', '<leader>sb', [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left>
 vim.keymap.set('n', '<leader>sp', '<Cmd>vsplit<CR>', { desc = 'Vertical split' })
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 vim.keymap.set('i', 'jk', '<Esc>', { noremap = true, silent = true })
-vim.keymap.set('n', '<leader>e', '<Cmd>Neotree toggle<CR>')
+-- vim.keymap.set('n', '<leader>e', '<Cmd>Neotree toggle<CR>')
+vim.keymap.set('n', '<leader>e', '<Cmd> lua MiniFiles.open(vim.api.nvim_buf_get_name(0))<CR>')
 vim.keymap.set('n', '<leader>ct', '<Cmd>TSContextToggle<CR>')
 vim.keymap.set('n', '<leader>cn', '<Cmd>cnext<CR>')
 vim.keymap.set('n', '<leader>cp', '<Cmd>cprev<CR>')
@@ -93,12 +102,20 @@ vim.keymap.set('n', '<leader>ol', ':ObsidianLinks<CR>')
 
 vim.keymap.set('n', '<leader>z', ':ZenMode<CR>')
 
+vim.keymap.set('n', '<leader>l', function()
+  vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
+end, { desc = 'Toggle lsp endhints' })
+
 local lazypath = vim.fn.stdpath 'data' .. '/lazy/lazy.nvim'
 if not vim.loop.fs_stat(lazypath) then
   local lazyrepo = 'https://github.com/folke/lazy.nvim.git'
   vim.fn.system { 'git', 'clone', '--filter=blob:none', '--branch=stable', lazyrepo, lazypath }
 end ---@diagnostic disable-next-line: undefined-field
 vim.opt.rtp:prepend(lazypath)
+
+vim.diagnostic.config {
+  severity_sort = true,
+}
 
 require('lazy').setup {
   'tpope/vim-sleuth', -- Detect tabstop and shiftwidth automatically

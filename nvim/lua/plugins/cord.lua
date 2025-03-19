@@ -11,7 +11,6 @@ end
 
 return {
   'vyfor/cord.nvim',
-  branch = 'client-server',
 
   opts = {
     editor = {
@@ -25,7 +24,7 @@ return {
       swap_icons = false,
     },
     timestamp = {
-      enabled = false,
+      enabled = true,
       reset_on_idle = true,
       reset_on_change = false,
     },
@@ -45,7 +44,12 @@ return {
         return string.format('🌊 %s %s:%s', opts.filename, opts.cursor_line, opts.cursor_char)
       end,
       editing = function(opts)
-        local current_tag = vim.fn['tagbar#currenttag']('%s', '', 'f')
+        local now = os.date '*t'
+        local work_time = (now.wday >= 2 and now.wday <= 6 and now.hour >= 12 and now.hour <= 20) or opts.workspace == 'helm' or opts.workspace == 'omni'
+        local current_tag = ''
+        -- if not work_time then
+        --   current_tag = vim.fn['tagbar#currenttag']('%s', '', 'f')
+        -- end
 
         local diagnostics = vim.diagnostic.get(0, { severity = { min = vim.diagnostic.severity.ERROR } })
 
@@ -85,7 +89,9 @@ return {
           return string.format('%s', status)
         else
           if opts.workspace == 'kairos' or opts.workspace == 'kairos-cli' then
-            return 'Side project time 🐼'
+            -- return 'Side project time 🐼'
+            -- return 'Cooking kairos 👨‍🍳'
+            return ''
           elseif opts.workspace == '.config' then
             return 'Configuring workflow 🤡'
           end

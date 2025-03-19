@@ -281,7 +281,7 @@ function icon_map() {
   "Telegram")
     icon_result=":telegram:"
     ;;
-  "Firefox Developer Edition" | "Firefox Nightly" | "Zen Browser")
+  "Firefox Developer Edition" | "Firefox Nightly" | "Zen")
     icon_result=":firefox_developer_edition:"
     ;;
   "Min")

@@ -7,7 +7,8 @@ front_app=(
   icon.background.drawing=off
   display=active
   script="$PLUGIN_DIR/front_app.sh"
-  click_script="open -a 'Mission Control'"
+  # click_script="open -a 'Mission Control'"
+  click_script="sketchybar --reload"
 )
 
 sketchybar --add item front_app left         \

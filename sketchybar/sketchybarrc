@@ -20,6 +20,7 @@ $CONFIG_DIR/helper/helper $HELPER > /dev/null 2>&1 &
 bar=(
   height=45
   color=$BAR_COLOR
+  blur_radius=30
   border_width=2
   border_color=$BAR_BORDER_COLOR
   shadow=on
@@ -80,6 +81,7 @@ source "$ITEM_DIR/svim.sh"
 source "$ITEM_DIR/media.sh"
 source "$ITEM_DIR/calendr.sh"
 source "$ITEM_DIR/task.sh"
+source "$ITEM_DIR/kairos.sh"
 
 sketchybar --hotload on
 
