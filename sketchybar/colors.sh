@@ -16,21 +16,38 @@
 # export BG2=0xff414550
 
 ### Catppuccin
-export BLACK=0xff181926
-export WHITE=0xffcad3f5
-export RED=0xffed8796
-export GREEN=0xffa6da95
-export BLUE=0xff8aadf4
-export YELLOW=0xffeed49f
-export PEACH=0xfffab387
-export ORANGE=0xfff5a97f
-export MAGENTA=0xffc6a0f6
-export GREY=0xff939ab7
-# export TRANSPARENT=0x00000000
-# export BG0=0xff1e1e2e
-export BG0=0xCC1e1e2e
-export BG1=0x603c3e4f
-export BG2=0x60494d64
+# export BLACK=0xff181926
+# export WHITE=0xffcad3f5
+# export RED=0xffed8796
+# export GREEN=0xffa6da95
+# export BLUE=0xff8aadf4
+# export YELLOW=0xffeed49f
+# export PEACH=0xfffab387
+# export ORANGE=0xfff5a97f
+# export MAGENTA=0xffc6a0f6
+# export GREY=0xff939ab7
+# # export TRANSPARENT=0x00000000
+# # export BG0=0xff1e1e2e
+# export BG0=0xCC1e1e2e
+# export BG1=0x603c3e4f
+# export BG2=0x60494d64
+
+### Gruvbox
+export BLACK=0xff282828
+export WHITE=0xffebdbb2
+export RED=0xffcc241d
+export GREEN=0xff98971a
+export BLUE=0xff458588
+export YELLOW=0xffd79921
+export PEACH=0xffd65d0e
+export ORANGE=0xfffe8019
+export MAGENTA=0xffb16286
+export GREY=0xffa89984
+
+export BG0=0xCC202020 
+export BG1=0x603c3836 
+export BG2=0x60403a36 
+
 
 # General bar colors
 export BAR_COLOR=$BG0

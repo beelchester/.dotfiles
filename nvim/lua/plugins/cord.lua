@@ -9,22 +9,35 @@ local is_blacklisted = function(opts)
   return vim.tbl_contains(blacklist, opts.workspace_name)
 end
 
+local stats = { buf_enter_count = 0, write_count = 0 }
+local apm_stats = 0
+
 return {
   'vyfor/cord.nvim',
+  init = function()
+    local apm_bus = require 'vim-apm.bus'
+    local apm_events = require 'vim-apm.event_names'
+    local manager = nil
 
+    apm_bus:listen(apm_events.STATS, function(s)
+      stats = s
+    end)
+
+    apm_bus:listen(apm_events.APM_REPORT, function(a)
+      apm_stats = a
+      if manager then
+        manager:queue_update(true)
+      end
+    end)
+  end,
   opts = {
     editor = {
       client = 'neovim',
       tooltip = 'Chad editor',
       icon = nil,
     },
-    display = {
-      theme = 'onyx',
-      swap_fields = false,
-      swap_icons = false,
-    },
     timestamp = {
-      enabled = true,
+      enabled = false,
       reset_on_idle = true,
       reset_on_change = false,
     },
@@ -44,8 +57,14 @@ return {
         return string.format('🌊 %s %s:%s', opts.filename, opts.cursor_line, opts.cursor_char)
       end,
       editing = function(opts)
+        local apm = function()
+          return tostring(apm_stats or 0)
+        end
+        -- local writes = function()
+        --   return tostring(stats.write_count or 0)
+        -- end
         local now = os.date '*t'
-        local work_time = (now.wday >= 2 and now.wday <= 6 and now.hour >= 12 and now.hour <= 20) or opts.workspace == 'helm' or opts.workspace == 'omni'
+        -- local work_time = (now.wday >= 2 and now.wday <= 6 and now.hour >= 12 and now.hour <= 20) or opts.workspace == 'helm' or opts.workspace == 'omni'
         local current_tag = ''
         -- if not work_time then
         --   current_tag = vim.fn['tagbar#currenttag']('%s', '', 'f')
@@ -54,9 +73,9 @@ return {
         local diagnostics = vim.diagnostic.get(0, { severity = { min = vim.diagnostic.severity.ERROR } })
 
         if #diagnostics > 0 then
-          return string.format('💀 %s errors %s %s:%s', #diagnostics, opts.filename, opts.cursor_line, opts.cursor_char)
+          return string.format('💀 %s errors %s %s:%s | %s APM', #diagnostics, opts.filename, opts.cursor_line, opts.cursor_char, apm())
         end
-        return string.format('🌊 %s %s:%s %s', opts.filename, opts.cursor_line, opts.cursor_char, current_tag)
+        return string.format('🌊 %s %s:%s %s | %s APM', opts.filename, opts.cursor_line, opts.cursor_char, current_tag, apm())
       end,
       file_browser = function()
         return 'Browsing files'

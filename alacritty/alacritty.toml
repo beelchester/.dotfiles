@@ -1,5 +1,5 @@
 import = [
-	"~/.config/alacritty/catppuccin-mocha.toml"
+	"~/.config/alacritty/gruvbox-material-mid-dark.toml"
 ]
 
 [env]
@@ -15,8 +15,8 @@ option_as_alt = "Onlyleft"
 
 [font]
 normal = {family = "SFMono Nerd Font", style = "Regular"}
-size = 16
-# size = 17
+# size = 16
+size = 17
 # size = 18
 # size = 19.5
 bold = { family = "SFMono Nerd Font", style = "Bold" }

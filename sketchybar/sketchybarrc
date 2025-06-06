@@ -79,9 +79,9 @@ source "$ITEM_DIR/stats.sh"
 source "$ITEM_DIR/cpu.sh"
 source "$ITEM_DIR/svim.sh"
 source "$ITEM_DIR/media.sh"
-source "$ITEM_DIR/calendr.sh"
-source "$ITEM_DIR/task.sh"
-source "$ITEM_DIR/kairos.sh"
+# source "$ITEM_DIR/calendr.sh"
+# source "$ITEM_DIR/task.sh"
+# source "$ITEM_DIR/kairos.sh"
 
 sketchybar --hotload on
 

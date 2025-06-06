@@ -1,5 +1,6 @@
 return {
   'akinsho/flutter-tools.nvim',
+  commit = '8199f8b3b2234a534e518a7a4054364dcf6369c8',
   dependencies = { 'nvim-lua/plenary.nvim', 'stevearc/dressing.nvim' },
   config = function()
     require('flutter-tools').setup {
