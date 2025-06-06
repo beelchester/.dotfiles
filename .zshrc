@@ -3,16 +3,19 @@ clear # stupid macos
 export PATH=$HOME/bin:/usr/local/bin:$PATH
 export PATH=/Users/sahil/.local/bin:$PATH
 # export PATH="${HOME}/Library/Android/sdk/tools:${HOME}/Library/Android/sdk/platform-tools:${PATH}"
+# export PATH=$PATH:~/.android-sdk-macosx/platform-tools/
 export PATH="$PATH:${HOME}/flutter/bin"
 export PATH="$PATH:${HOME}/go/bin"
 export PATH="$PATH:${HOME}/.tmux/plugins/tmuxifier/bin"
 export PATH=$PATH:~/.cargo/bin/
+export PATH="$PATH:/Applications/Zen Browser.app/Contents/MacOS"
 # export VCPKG_ROOT=$HOME/vcpkg
 # export PATH=$VCPKG_ROOT:$PATH
 export LIBRARY_PATH="$LIBRARY_PATH:$(brew --prefix)/lib"
 
 # stops brew auto update
 export HOMEBREW_NO_AUTO_UPDATE=1
+export PKG_CONFIG_PATH="/opt/homebrew/lib/pkgconfig:$PKG_CONFIG_PATH"
 
 # export FFMPEG_INCLUDE_DIR="/Users/sahil/Developer/ffmpeg_builds/ffmpeg/include/"
 # export FFMPEG_LIB_DIR="/Users/sahil/Developer/ffmpeg_builds/ffmpeg/lib/"
@@ -24,6 +27,7 @@ bindkey '^R' history-incremental-search-backward
 alias n='nvim'
 alias nrd='npm run dev'
 alias ts='~/tmux-sessionizer'
+alias tfs='~/tmux-fuzzy-sessions'
 alias t='tmux'
 alias ta='tmux a'
 alias tk='tmux kill-session -t'
@@ -44,6 +48,8 @@ alias gcm='git commit -m'
 alias gcsm='git commit -s -m'
 alias glog='git log'
 alias gcl="git clone"
+alias gs='git stash'
+alias gsa='git stash apply'
 
 alias td="todoist"
 
@@ -85,7 +91,7 @@ eval "$(zoxide init zsh)"
 bindkey -v # vi mode
 bindkey -M viins jk vi-cmd-mode # jk to exit insert mode
 bindkey -v '^?' backward-delete-char # https://unix.stackexchange.com/questions/290392/backspace-in-zsh-stuck
-source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
@@ -102,7 +108,7 @@ _fzf_compgen_dir() {
 }
 
 source ~/fzf-git.sh/fzf-git.sh
-export BAT_THEME="Catppuccin Mocha"
+export BAT_THEME="gruvbox-dark"
 
 alias ls='eza --color=always --icons=always'
 
@@ -136,5 +142,11 @@ eval "$(atuin init zsh)"
 bindkey '^f' atuin-search
 
 bindkey -s '^O' 'ts^M'
+bindkey -s '^A' 'tfs^M'
 bindkey -s '^w' 'ls^M'
 bindkey -s '^p' 'open .^M'
+
+# bun completions
+[ -s "/Users/sahil/.bun/_bun" ] && source "/Users/sahil/.bun/_bun"
+
+export PATH=$PATH:/Users/sahil/.spicetify
