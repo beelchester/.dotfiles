@@ -1,12 +1,10 @@
-import = [
-	"~/.config/alacritty/gruvbox-material-mid-dark.toml"
-]
 
 [env]
 TERM = "xterm-256color"
 
 [window]
-opacity = 0.8
+# opacity = 0.8
+opacity = 0.85
 blur = true
 padding = {x = 18, y = 16}
 dynamic_padding = true
@@ -15,9 +13,15 @@ option_as_alt = "Onlyleft"
 
 [font]
 normal = {family = "SFMono Nerd Font", style = "Regular"}
-# size = 16
-size = 17
+size = 13
+# size = 15
+# size = 17
 # size = 18
 # size = 19.5
 bold = { family = "SFMono Nerd Font", style = "Bold" }
+
+[general]
+import = [
+	"~/.config/alacritty/gruvbox-material-mid-dark.toml"
+]
 
