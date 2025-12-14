@@ -9,8 +9,8 @@ if #args == 0 then
   vim.cmd 'autocmd VimEnter * :Alpha'
 end
 -- Turn off Supermaven and copilot by default
-vim.cmd 'autocmd VimEnter * :SupermavenStop'
-vim.cmd 'autocmd VimEnter * :Copilot disable'
+-- vim.cmd 'autocmd VimEnter * :SupermavenStop'
+-- vim.cmd 'autocmd VimEnter * :Copilot disable'
 vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
 -- vim.keymap.set({ 'n', 'v', 'i', 'x' }, '<M-w>', '<C-,>') -- don't remember why I did this lol
 
@@ -54,6 +54,7 @@ vim.keymap.set('n', '<leader>rs', '<Cmd>SupermavenRestart<CR>', { desc = 'Restar
 -- substitue word under cursor in whole file
 vim.keymap.set('n', '<leader>sb', [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]], { desc = 'Substitute word' })
 vim.keymap.set('n', '<leader>sp', '<Cmd>vsplit<CR>', { desc = 'Vertical split' })
+vim.keymap.set('n', '<leader>sv', '<Cmd>split<CR>', { desc = 'Horizontal split' })
 vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
 vim.keymap.set('i', 'jk', '<Esc>', { noremap = true, silent = true })
 -- vim.keymap.set('n', '<leader>e', '<Cmd>Neotree toggle<CR>')
@@ -153,13 +154,13 @@ require('lazy').setup {
     },
   },
 
-  {
-    'wakatime/vim-wakatime',
-    lazy = false,
-    setup = function()
-      vim.cmd [[packadd wakatime/vim-wakatime]]
-    end,
-  },
+  -- {
+  --   'wakatime/vim-wakatime',
+  --   lazy = false,
+  --   setup = function()
+  --     vim.cmd [[packadd wakatime/vim-wakatime]]
+  --   end,
+  -- },
 
   { 'github/copilot.vim' },
 

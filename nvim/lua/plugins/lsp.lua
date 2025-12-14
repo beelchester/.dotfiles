@@ -19,9 +19,15 @@ return { -- LSP Configuration & Plugins
   },
   config = function(_, opts)
     local capabilities = require('blink.cmp').get_lsp_capabilities()
-    require('lspconfig').lua_ls.setup {
+    vim.lsp.config('lua_ls', {
       capabilities = capabilities,
-    }
+    })
+
+    vim.lsp.config('clangd', {
+      cmd = { '/etc/profiles/per-user/sahil/bin/clangd', '--clang-tidy' },
+      filetypes = { 'h', 'hpp', 'c', 'cpp', 'cuh', 'cu', 'objc', 'objcpp', 'proto' },
+      capabilities = capabilities,
+    })
     vim.api.nvim_create_autocmd('LspAttach', {
       group = vim.api.nvim_create_augroup('kickstart-lsp-attach', { clear = true }),
       callback = function(event)
@@ -72,30 +78,24 @@ return { -- LSP Configuration & Plugins
         --  For example, in C this would take you to the header
         map('gD', vim.lsp.buf.declaration, '[G]oto [D]eclaration')
 
-        local client = vim.lsp.get_client_by_id(event.data.client_id)
-        if client and client.server_capabilities.documentHighlightProvider then
-          vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
-            buffer = event.buf,
-            callback = vim.lsp.buf.document_highlight,
-          })
-
-          vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI' }, {
-            buffer = event.buf,
-            callback = vim.lsp.buf.clear_references,
-          })
-        end
+        -- local client = vim.lsp.get_client_by_id(event.data.client_id)
+        -- if client and client.server_capabilities.documentHighlightProvider then
+        --   vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
+        --     buffer = event.buf,
+        --     callback = vim.lsp.buf.document_highlight,
+        --   })
+        --
+        --   vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI' }, {
+        --     buffer = event.buf,
+        --     callback = vim.lsp.buf.clear_references,
+        --   })
+        -- end
       end,
     })
 
     local capabilities = vim.lsp.protocol.make_client_capabilities()
     -- capabilities = vim.tbl_deep_extend('force', capabilities, require('cmp_nvim_lsp').default_capabilities())
     local servers = {
-      clangd = {
-        cmd = {
-          'clangd',
-          '--offset-encoding=utf-16',
-        },
-      },
       -- tsserver = {},
       tailwindcss = {},
       lua_ls = {
@@ -115,21 +115,21 @@ return { -- LSP Configuration & Plugins
           },
         },
       },
-      gopls = {
-        settings = {
-          gopls = {
-            analyses = {
-              unusedparams = true,
-            },
-            staticcheck = true,
-            gofumpt = true,
-          },
-        },
-      },
+      -- gopls = {
+      --   settings = {
+      --     gopls = {
+      --       analyses = {
+      --         unusedparams = true,
+      --       },
+      --       staticcheck = true,
+      --       gofumpt = true,
+      --     },
+      --   },
+      -- },
     }
-    require('mason-lspconfig').setup_handlers {
-      ['rust_analyzer'] = function() end,
-    }
+    -- require('mason-lspconfig').setup_handlers {
+    --   ['rust_analyzer'] = function() end,
+    -- }
 
     -- Ensure the servers and tools above are installed
     --  To check the current status of installed tools and/or manually install
@@ -155,7 +155,8 @@ return { -- LSP Configuration & Plugins
           -- by the server configuration above. Useful when disabling
           -- certain features of an LSP (for example, turning off formatting for tsserver)
           server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
-          require('lspconfig')[server_name].setup(server)
+
+          vim.lsp.config(server_name, server)
         end,
       },
     }

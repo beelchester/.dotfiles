@@ -1,0 +1,14 @@
+#!/usr/bin/env bash
+sessions=$(tmux ls 2>/dev/null | awk -F: '{print $1}')
+if [[ -z "$sessions" ]]; then
+  exit 1
+fi
+selected=$(echo "$sessions" | fzf --height=40% --reverse)
+if [[ -z "$selected" ]]; then
+  exit 0
+fi
+if [[ -z "$TMUX" ]]; then
+  tmux attach-session -t "$selected"
+else
+  tmux switch-client -t "$selected"
+fi

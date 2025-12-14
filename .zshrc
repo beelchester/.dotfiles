@@ -1,12 +1,28 @@
 clear # stupid macos
 
+# AS backend build flags
+# export RUSTFLAGS="-L/opt/homebrew/opt/libomp/lib -lomp"
+# export LIBRARY_PATH="/opt/homebrew/opt/libomp/lib:$LIBRARY_PATH"
+# export LDFLAGS="-L/opt/homebrew/opt/libomp/lib"
+# export CPPFLAGS="-I/opt/homebrew/opt/libomp/include"
+
+export CMAKE="$HOME/dev/backend/.vendor/tools/cmake/cmake-3.31.5-macos10.10-universal/CMake.app/Contents/bin/cmake"
+export PATH="$HOME/dev/backend/.vendor/tools/cmake/cmake-3.31.5-macos10.10-universal/CMake.app/Contents/bin:$PATH"
+export PKG_CONFIG_PATH="/Users/beel/dev/backend/vcpkg_installed/arm64-osx-release/lib/pkgconfig"
+
+export JAVA_HOME="/Applications/Android Studio.app/Contents/jbr/Contents/Home"
+export ANDROID_HOME="$HOME/Library/Android/sdk"
+export NDK_HOME="$ANDROID_HOME/ndk/$(ls -1 $ANDROID_HOME/ndk)"
 export PATH=$HOME/bin:/usr/local/bin:$PATH
 export PATH=/Users/sahil/.local/bin:$PATH
+export NVM_DIR="$HOME/.nvm"
+[ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"
+[ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"
 # export PATH="${HOME}/Library/Android/sdk/tools:${HOME}/Library/Android/sdk/platform-tools:${PATH}"
 # export PATH=$PATH:~/.android-sdk-macosx/platform-tools/
 export PATH="$PATH:${HOME}/flutter/bin"
 export PATH="$PATH:${HOME}/go/bin"
-export PATH="$PATH:${HOME}/.tmux/plugins/tmuxifier/bin"
+export PATH="$PATH:${HOME}/.config/tmux/plugins/tmuxifier/bin"
 export PATH=$PATH:~/.cargo/bin/
 export PATH="$PATH:/Applications/Zen Browser.app/Contents/MacOS"
 # export VCPKG_ROOT=$HOME/vcpkg
@@ -25,6 +41,7 @@ bindkey '^R' history-incremental-search-backward
 # Path to your oh-my-zsh installation.
 # export ZSH="$HOME/.oh-my-zsh"
 alias n='nvim'
+alias cl='cargo literoom'
 alias nrd='npm run dev'
 alias ts='~/tmux-sessionizer'
 alias tfs='~/tmux-fuzzy-sessions'
@@ -37,6 +54,7 @@ alias tks='tmux kill-server'
 alias :q='clear'
 alias :qa='exit'
 alias la='ls -la'
+alias lg='lazygit'
 
 alias to="~/tmux-obsidian"
 alias no="n /Volumes/VERACRYPT/Obsidian/saaa/"
@@ -51,13 +69,15 @@ alias gcl="git clone"
 alias gs='git stash'
 alias gsa='git stash apply'
 
-alias td="todoist"
+alias td="~/.config/aerospace/toggle_dvorak.sh"
 
 eval "$(tmuxifier init -)"
 
 export EDITOR="nvim"
 
 ZSH_THEME="robbyrussell"
+
+# source $HOME/notify_tmux.zsh
 
 # source $ZSH/oh-my-zsh.sh # don't need this, unnecessary bloatware causing startup slowdown
 
@@ -107,7 +127,7 @@ _fzf_compgen_dir() {
   fd --type=d --hidden --exclude .git . "$1"
 }
 
-source ~/fzf-git.sh/fzf-git.sh
+#source ~/fzf-git.sh/fzf-git.sh
 export BAT_THEME="gruvbox-dark"
 
 alias ls='eza --color=always --icons=always'
@@ -130,10 +150,6 @@ _fzf_comprun() {
   esac
 }
 
-# bun
-export BUN_INSTALL="$HOME/.bun"
-export PATH="$BUN_INSTALL/bin:$PATH"
-
 . "$HOME/.atuin/bin/env"
 
 export ATUIN_NOBIND="true"
@@ -146,7 +162,18 @@ bindkey -s '^A' 'tfs^M'
 bindkey -s '^w' 'ls^M'
 bindkey -s '^p' 'open .^M'
 
-# bun completions
-[ -s "/Users/sahil/.bun/_bun" ] && source "/Users/sahil/.bun/_bun"
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/Users/beel/.lmstudio/bin"
+# End of LM Studio CLI section
 
-export PATH=$PATH:/Users/sahil/.spicetify
+export PATH="$HOME/.local/bin:$PATH"
+
+# bun completions
+[ -s "/Users/beel/.bun/_bun" ] && source "/Users/beel/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+
+# Added by Antigravity
+export PATH="/Users/beel/.antigravity/antigravity/bin:$PATH"

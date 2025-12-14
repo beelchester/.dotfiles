@@ -1,8 +1,7 @@
 #!/usr/bin/env zsh
 
 PROJECTS=(
-    "$HOME/Developer"
-    "$HOME/Developer/dev-practice"
+    "$HOME/dev"
     "$HOME/.config/nvim"
 )
 
@@ -31,10 +30,10 @@ selected_names=(
     "rustdesk"
     )
 
-if [[ " ${selected_names[*]} " == *" $selected_name "* ]]; then
-    tmuxifier load-session $selected_name
-    exit 0
-fi
+# if [[ " ${selected_names[*]} " == *" $selected_name "* ]]; then
+#     tmuxifier load-session $selected_name
+#     exit 0
+# fi
 
 if [[ -z $TMUX ]] && [[ -z $tmux_running ]]; then
     tmux new-session -s $selected_name -c $selected

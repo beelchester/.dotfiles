@@ -8,9 +8,9 @@
 -- I deleted x86 brew itself... and reinstalled again with /opt/homebrew/bin/brew (arm)
 -- All good now :)
 
-local extensions_path = vim.env.HOME .. '/.vscode/extensions'
-local codelldb_path = extensions_path .. '/vadimcn.vscode-lldb-1.10.0/adapter/codelldb'
-local liblldb_path = extensions_path .. '/vadimcn.vscode-lldb-1.10.0/lldb/lib/liblldb.dylib'
+local extensions_path = vim.env.HOME .. '/.vscode-oss/extensions'
+local codelldb_path = extensions_path .. '/vadimcn.vscode-lldb-1.11.5/adapter/codelldb'
+local liblldb_path = extensions_path .. '/vadimcn.vscode-lldb-1.11.5/lldb/lib/liblldb.so'
 
 return {
   'mrcjkb/rustaceanvim',
@@ -23,6 +23,7 @@ return {
       },
     },
     server = {
+      cmd = { 'lspmux', 'client' },
       on_attach = function(_, bufnr)
         vim.keymap.set('n', '<leader>ra', function()
           vim.cmd.RustLsp 'codeAction' -- supports rust-analyzer's grouping
@@ -40,13 +41,19 @@ return {
       ['rust-analyzer'] = {
         cargo = {
           allFeatures = true,
-          loadOutDirsFromCheck = true,
-          runBuildScripts = true,
+          loadOutDirsFromCheck = false,
+          runBuildScripts = false,
+          workspace = true,
+          extraArgs = {
+            '--config',
+            '.cargo/config.local.toml',
+          },
         },
         checkOnSave = {
           allFeatures = true,
-          command = 'clippy',
-          extraArgs = { '--no-deps' },
+          -- command = 'clippy',
+          -- extraArgs = { '--no-deps' },
+          command = 'check',
         },
       },
     },
@@ -61,10 +68,14 @@ return {
         tools = opts.tools,
         server = opts.server,
         settings = opts.settings,
+        ra_multiplex = opts.ra_multiplex,
       }
     end
 
-    vim.g.rustaceanvim = vim.tbl_deep_extend('force', vim.g.rustaceanvim(), opts or {})
+    local base = vim.g.rustaceanvim()
+    opts.dap = base.dap
+    vim.g.rustaceanvim = opts
+    -- vim.g.rustaceanvim = vim.tbl_deep_extend('force', vim.g.rustaceanvim(), opts or {})
   end,
 }
 
