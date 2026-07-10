@@ -10,8 +10,12 @@ export CMAKE="$HOME/dev/backend/.vendor/tools/cmake/cmake-3.31.5-macos10.10-univ
 export PATH="$HOME/dev/backend/.vendor/tools/cmake/cmake-3.31.5-macos10.10-universal/CMake.app/Contents/bin:$PATH"
 export PKG_CONFIG_PATH="/Users/beel/dev/backend/vcpkg_installed/arm64-osx-release/lib/pkgconfig"
 
+export PATH="$HOME/.config/emacs/bin:$PATH"
+export PATH="$HOME/.rokit/bin:$PATH"
+
 export JAVA_HOME="/Applications/Android Studio.app/Contents/jbr/Contents/Home"
 export ANDROID_HOME="$HOME/Library/Android/sdk"
+export PATH=$PATH:$HOME/Library/Android/sdk/platform-tools
 export NDK_HOME="$ANDROID_HOME/ndk/$(ls -1 $ANDROID_HOME/ndk)"
 export PATH=$HOME/bin:/usr/local/bin:$PATH
 export PATH=/Users/sahil/.local/bin:$PATH
@@ -41,7 +45,7 @@ bindkey '^R' history-incremental-search-backward
 # Path to your oh-my-zsh installation.
 # export ZSH="$HOME/.oh-my-zsh"
 alias n='nvim'
-alias cl='cargo literoom'
+alias cl='cargo xtask -- corgi run -p lite_2 --release'
 alias nrd='npm run dev'
 alias ts='~/tmux-sessionizer'
 alias tfs='~/tmux-fuzzy-sessions'
@@ -128,7 +132,7 @@ _fzf_compgen_dir() {
 }
 
 #source ~/fzf-git.sh/fzf-git.sh
-export BAT_THEME="gruvbox-dark"
+export BAT_THEME="Catppuccin Mocha"
 
 alias ls='eza --color=always --icons=always'
 
@@ -177,3 +181,4 @@ export PATH="$BUN_INSTALL/bin:$PATH"
 
 # Added by Antigravity
 export PATH="/Users/beel/.antigravity/antigravity/bin:$PATH"
+export PATH="$HOME/piper/piper:$PATH"
