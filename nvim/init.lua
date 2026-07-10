@@ -10,7 +10,7 @@ if #args == 0 then
 end
 -- Turn off Supermaven and copilot by default
 -- vim.cmd 'autocmd VimEnter * :SupermavenStop'
--- vim.cmd 'autocmd VimEnter * :Copilot disable'
+vim.cmd 'autocmd VimEnter * :Copilot disable'
 vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled())
 -- vim.keymap.set({ 'n', 'v', 'i', 'x' }, '<M-w>', '<C-,>') -- don't remember why I did this lol
 

@@ -9,6 +9,9 @@ after-startup-command = []
 start-at-login = true
 
 # Normalizations. See: https://nikitabobko.github.io/AeroSpace/guide#normalization
+# enable-normalization-flatten-containers = true
+# enable-normalization-opposite-orientation-for-nested-containers = true
+
 enable-normalization-flatten-containers = true
 enable-normalization-opposite-orientation-for-nested-containers = true
 
@@ -39,8 +42,8 @@ automatically-unhide-macos-hidden-apps = false
 
 # Possible values: (qwerty|dvorak|colemak)
 # See https://nikitabobko.github.io/AeroSpace/guide#key-mapping
-[key-mapping]
-preset = 'dvorak'
+# [key-mapping]
+# preset = 'dvorak'
 
 # Gaps between windows (inner-*) and between monitor edges (outer-*).
 # Possible values:
@@ -50,24 +53,25 @@ preset = 'dvorak'
 #                 Monitor pattern is the same as for 'workspace-to-monitor-force-assignment'.
 #                 See:
 #                 https://nikitabobko.github.io/AeroSpace/guide#assign-workspaces-to-monitors
-[gaps]
-inner.horizontal = 10
-inner.vertical =   10
-outer.left =       10
-outer.bottom =     10
-outer.top =        10
-outer.right =      10
+# [gaps]
+# inner.horizontal = 3
+# inner.vertical =   3
+# outer.left =       10
+# outer.bottom =     10
+# outer.top =        10
+# outer.right =      10
 
 [workspace-to-monitor-force-assignment]
-1 = 'main'
-2 = 'main'
-3 = 'main'
-4 = 'main'
-5 = 'main'
-6 = ['secondary', 'main']
-7 = ['secondary', 'main']
-8 = ['secondary', 'main']
-9 = ['secondary', 'main']
+1 = ['LS27D70xE', 'LG HDR WFHD', 'Built-in Retina Display']
+2 = ['LS27D70xE', 'LG HDR WFHD', 'Built-in Retina Display']
+3 = ['LS27D70xE', 'LG HDR WFHD', 'Built-in Retina Display']
+4 = ['LS27D70xE', 'LG HDR WFHD', 'Built-in Retina Display']
+5 = ['LS27D70xE', 'LG HDR WFHD', 'Built-in Retina Display']
+6 = ['LG HDR WFHD', 'LS27D70xE', 'Built-in Retina Display']
+7 = ['LG HDR WFHD', 'LS27D70xE', 'Built-in Retina Display']
+8 = ['LG HDR WFHD', 'LS27D70xE', 'Built-in Retina Display']
+9 = ['LG HDR WFHD', 'LS27D70xE', 'Built-in Retina Display']
+10 = ['Built-in Retina Display', 'LS27D70xE', 'LG HDR WFHD']
 
 # 'main' binding mode declaration
 # See: https://nikitabobko.github.io/AeroSpace/guide#binding-modes
@@ -221,18 +225,18 @@ alt-shift-right = 'join-with right'
 
 # --- App workspace auto-assign rules ---
 
-[[on-window-detected]]
-if.app-name-regex-substring = 'Finder'
-run = ['move-node-to-workspace 1']
-
+# [[on-window-detected]]
+# if.app-name-regex-substring = 'Finder'
+# run = ['move-node-to-workspace 1']
+#
 [[on-window-detected]]
 if.app-name-regex-substring = 'Mail'
 run = ['move-node-to-workspace 2']
-
-[[on-window-detected]]
-if.app-name-regex-substring = 'Calendar'
-run = ['move-node-to-workspace 3']
-
+#
+# [[on-window-detected]]
+# if.app-name-regex-substring = 'Calendar'
+# run = ['move-node-to-workspace 3']
+#
 [[on-window-detected]]
 if.app-name-regex-substring = 'Slack'
 run = ['move-node-to-workspace A']
@@ -240,47 +244,56 @@ run = ['move-node-to-workspace A']
 [[on-window-detected]]
 if.app-name-regex-substring = 'Discord'
 run = ['move-node-to-workspace D']
-
-[[on-window-detected]]
-if.app-name-regex-substring = 'Bitwarden'
-run = ['move-node-to-workspace B']
-
-[[on-window-detected]]
-if.app-name-regex-substring = 'ChatGPT'
-run = ['move-node-to-workspace C']
-
-[[on-window-detected]]
-if.app-name-regex-substring = 'Perplexity'
-run = ['move-node-to-workspace C']
-
+#
+# [[on-window-detected]]
+# if.app-name-regex-substring = 'Telegram'
+# run = ['move-node-to-workspace B']
+#
+# [[on-window-detected]]
+# if.app-name-regex-substring = 'Bitwarden'
+# run = ['move-node-to-workspace B']
+#
+# [[on-window-detected]]
+# if.app-name-regex-substring = 'ChatGPT'
+# run = ['move-node-to-workspace C']
+#
+# [[on-window-detected]]
+# if.app-name-regex-substring = 'Perplexity'
+# run = ['move-node-to-workspace C']
+#
 [[on-window-detected]]
 if.app-name-regex-substring = 'Music'
-run = ['move-node-to-workspace M']
+run = ['move-node-to-workspace 7']
 
 [[on-window-detected]]
 if.app-name-regex-substring = 'Spotify'
-run = ['move-node-to-workspace M']
-
-[[on-window-detected]]
-if.app-name-regex-substring = 'Calculator'
-run = ['move-node-to-workspace O']
-
-[[on-window-detected]]
-if.app-name-regex-substring = 'Obsidian'
-run = ['move-node-to-workspace O']
-
-[[on-window-detected]]
-if.app-name-regex-substring = 'Alacritty'
-run = ['move-node-to-workspace T']
-
+run = ['move-node-to-workspace 7']
+#
 # [[on-window-detected]]
-# if.app-name-regex-substring = 'Zen'
-# run = ['move-node-to-workspace Z']
+# if.app-name-regex-substring = 'Calculator'
+# run = ['move-node-to-workspace O']
+#
+# [[on-window-detected]]
+# if.app-name-regex-substring = 'Obsidian'
+# run = ['move-node-to-workspace O']
+#
+# [[on-window-detected]]
+# if.app-name-regex-substring = 'Alacritty'
+# run = ['move-node-to-workspace T']
+#
+# # [[on-window-detected]]
+# # if.app-name-regex-substring = 'Zen'
+# # run = ['move-node-to-workspace Z']
+
+[[on-window-detected]]
+if.app-name-regex-substring = 'Toggl Track'
+run = ['move-node-to-workspace 8']
 
 [[on-window-detected]]
 if.app-name-regex-substring = 'Structure'
-run = ['move-node-to-workspace R']
+run = ['move-node-to-workspace 8']
 
 # [[on-window-detected]]
 # if.app-name-regex-substring = 'Aftershoot-Next'
-# run = ['move-node-to-workspace 8']
+# run = ['move-node-to-workspace 6']
+
